@@ -1,0 +1,35 @@
+***********************************************************
+EXAMPLE 2 : SIMULATION OF THE WATER BALANCE IN A BARE FIELD
+***********************************************************
+
+In this numerical experiment, the water balance is simulated for a bare field
+soil subjected to a varying climatic boundary conditions.The soil is draining 
+freely.
+
+1) Analyse in detail the input files, i.e.
+   - analyse the climatic data by incorporating the climdata.in file
+     in a spreadsheet, and try to depict the the time course of the 
+     precipitation, irrigation, potential evapotranspiration, etc...
+   - Analyse the year totals of the climatic data.
+   - Analyse the hydraulic properties using the same procedure.
+
+2) Run the model by typing [path]\WAVE (+enter)
+
+3) Analyse
+   1) The terms of the field water balance at the end of the simulation
+      period by investigating WAT_SUM.OUT.
+   2) Analyse the daily terms of the water balance by analysing
+      WAT_CUM.OUT
+   3) Analyse the time course of the moisture content and pressure head using
+      WC.OUT and PH.OUT.
+   
+4) Try to answer the following question.
+  1) What's the estimate of the drainage at 30 cm, 50 cm , 100 cm and 120 cm
+     depth at different times?
+   
+ 
+   
+      
+   
+
+   
