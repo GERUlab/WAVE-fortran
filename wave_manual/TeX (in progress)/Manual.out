@@ -1,0 +1,48 @@
+\BOOKMARK [0][-]{chapter*.2}{Preface}{}% 1
+\BOOKMARK [0][-]{chapter*.3}{Acknowledgements}{}% 2
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 3
+\BOOKMARK [1][-]{section.1.1}{Background and ORIGIN}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{Space and time scales}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.3}{References}{chapter.1}% 6
+\BOOKMARK [0][-]{chapter.2}{The water transport module}{}% 7
+\BOOKMARK [1][-]{section.2.1}{ The soil water flow equation}{chapter.2}% 8
+\BOOKMARK [1][-]{section.2.2}{ The soil hydraulic properties}{chapter.2}% 9
+\BOOKMARK [2][-]{subsection.2.2.1}{ The soil moisture retention characteristic}{section.2.2}% 10
+\BOOKMARK [2][-]{subsection.2.2.2}{ The hydraulic conductivity relationship}{section.2.2}% 11
+\BOOKMARK [1][-]{section.2.3}{Numerical solution of the water flow equation}{chapter.2}% 12
+\BOOKMARK [2][-]{subsection.2.3.1}{ The solution procedure}{section.2.3}% 13
+\BOOKMARK [2][-]{subsection.2.3.2}{Definition of the upper boundary condition}{section.2.3}% 14
+\BOOKMARK [2][-]{subsection.2.3.3}{Definition of the Bottom boundary condition}{section.2.3}% 15
+\BOOKMARK [1][-]{section.2.4}{ Modelling of the water transport in cropped soils}{chapter.2}% 16
+\BOOKMARK [2][-]{subsection.2.4.1}{ Introduction}{section.2.4}% 17
+\BOOKMARK [2][-]{subsection.2.4.2}{Crop interception}{section.2.4}% 18
+\BOOKMARK [2][-]{subsection.2.4.3}{ Calculation of the potential evapotranspiration of a crop}{section.2.4}% 19
+\BOOKMARK [2][-]{subsection.2.4.4}{ Estimation of the potential transpiration and evaporation}{section.2.4}% 20
+\BOOKMARK [1][-]{section.2.5}{Description of the root water uptake}{chapter.2}% 21
+\BOOKMARK [1][-]{section.2.6}{References}{chapter.2}% 22
+\BOOKMARK [0][-]{chapter.3}{The solute transport module}{}% 23
+\BOOKMARK [1][-]{section.3.1}{ Introduction}{chapter.3}% 24
+\BOOKMARK [1][-]{section.3.2}{The soil solute transport equation}{chapter.3}% 25
+\BOOKMARK [1][-]{section.3.3}{Numerical solution of the solute transport equation}{chapter.3}% 26
+\BOOKMARK [2][-]{subsection.3.3.1}{The solution Procedure}{section.3.3}% 27
+\BOOKMARK [2][-]{subsection.3.3.2}{Definition of the Upper boundary condition}{section.3.3}% 28
+\BOOKMARK [2][-]{subsection.3.3.3}{Definition of the lower boundary condition}{section.3.3}% 29
+\BOOKMARK [1][-]{section.3.4}{References}{chapter.3}% 30
+\BOOKMARK [0][-]{chapter.4}{The heat transport module}{}% 31
+\BOOKMARK [1][-]{section.4.1}{Introduction}{chapter.4}% 32
+\BOOKMARK [1][-]{section.4.2}{The soil heat flow equation}{chapter.4}% 33
+\BOOKMARK [1][-]{section.4.3}{Numerical solution of the heat flow equation}{chapter.4}% 34
+\BOOKMARK [2][-]{subsection.4.3.1}{The solution procedure}{section.4.3}% 35
+\BOOKMARK [2][-]{subsection.4.3.2}{Definition of the upper boundary condition}{section.4.3}% 36
+\BOOKMARK [2][-]{subsection.4.3.3}{Definition of the lower boundary condition}{section.4.3}% 37
+\BOOKMARK [1][-]{section.4.4}{References}{chapter.4}% 38
+\BOOKMARK [0][-]{chapter.5}{ The nitrogen fate module}{}% 39
+\BOOKMARK [1][-]{section.5.1}{ Introduction}{chapter.5}% 40
+\BOOKMARK [1][-]{section.5.2}{ Modelling of nitrogen transformations in soils}{chapter.5}% 41
+\BOOKMARK [2][-]{subsection.5.2.1}{Mineralisation of the soil organic nitrogen}{section.5.2}% 42
+\BOOKMARK [2][-]{subsection.5.2.2}{ Denitrification}{section.5.2}% 43
+\BOOKMARK [2][-]{subsection.5.2.3}{ Volatilisation}{section.5.2}% 44
+\BOOKMARK [2][-]{subsection.5.2.4}{ Nitrification}{section.5.2}% 45
+\BOOKMARK [2][-]{subsection.5.2.5}{ Hydrolysis of urea}{section.5.2}% 46
+\BOOKMARK [2][-]{subsection.5.2.6}{ Uptake of ammonia and nitrate}{section.5.2}% 47
+\BOOKMARK [1][-]{section.5.3}{References}{chapter.5}% 48

@@ -1,0 +1,71 @@
+\chapter{The heat transport module}
+
+\section{Introduction}
+
+Most soil biological and bio-chemical processes are influenced by soil temperature. Processes like nitrogen mineralisation e.g., occur at an optimal rate in optimal temperature conditions. The correct assessment of these processes therefore involves a correct description of the soil temperature. Heat flow in the WAVE-model is simulated one-dimensionally. The heat flow module is similar to the model of Tillotson et al. (1980) and Wagenet and Hutson (1989). The calculation of the soil thermal properties is based on work of de Vries (1952), as adopted by Wierenga et al. (1969) and Wagenet and Hutson (1990).
+\\
+\section{The soil heat flow equation}
+
+To model the transport of heat in porous media, the one-dimensional heat flow equation is used:
+\begin{equation}
+\frac{\partial T}{\partial t} = \frac{\partial}{\partial x} \left(\frac{\lambda(\theta)}{\rho C_p}\cdot\frac{\partial T}{\partial x}\right)
+\end{equation}
+
+where T is the soil temperature ($^\circ C$); $\lambda(\theta)$ is the thermal conductivity (J m-1 s-1 °C-1); r is the wet bulk density (kg m-3); and $C_p$ is the specific heat capacity of the soil (J kg-1 °C-1). Neglecting the heat capacity of the soil gaseous phase, the volumetric heat capacity of the soil is governed by the heat capacity of the soil solid and water phase or:
+\begin{equation}
+\rho \cdot C_p = \rho_s \cdot C_s + \theta\cdot \rho_w \cdot C_w
+\end{equation}
+
+where $\rho_s$is the bulk density of the soil solid phase; $\rho_w$ the density of water; $C_s$ is the specific gravimetric heat capacity of the soil solids (840 J kg-1 °C-1); $C_w$ is the specific gravimetric heat capacity of water (4.2 kJ kg-1 °C-1). The thermal conductivity is calculated in the WAVE-model as reported by Wierenga et al. (1969). Considering soil as a continuous medium of either water or air and solids dispersed in it, then the thermal conductivity can be approximated as:
+\begin{equation}
+\lambda = c \cdot \frac{\displaystyle\sum_{i=0}^n k_i \cdot X_i \cdot \lambda_i}{\displaystyle\sum_{i=0}^n k_i \cdot X_i}
+\end{equation}
+where n is the number of different components, $X_i$ is the volume fraction of the i-th component (-), $\lambda_i$ is the thermal conductivity of the i-th component (J m-1 s-1 °C-1), and c is an empirical correction factor (-). The volume fraction of quartz, organic matter and other solids is default set equal to 0.54, 0.045 and 0.015 respectively, while the value of c equals 1.65, for $\theta <0.22$, and 0.0 for $\theta > 0.22$ (Skaggs and Smith, 1967). The subscript zero refers to the continuum medium, e.g. air for dry soil or water for moist soil, with $k_0=1$. Other values of $k_i$ may be calculated from:
+\begin{eqnarray}
+k_i &=& \frac{1}{3} \cdot \displaystyle\sum_{j=0}^3 \left(1+\left(\frac{\lambda_i}{\lambda_0}-1 \right)\cdot g_j \right)^{-1}
+\end{eqnarray}
+where gj is a dimensionless factor depending on the particle shape of the i-th component, with $g_1+g_2+g_3=1$. The values of $\lambda_i$ for quartz, organic matter, other solids and air at 20 °C are default equal to 20.4, 0.6, 0.7 and 0.0615 mCal cm-1 sec-1 °C-1. The apparent thermal conductivity of the air filled pores is taken to be $\lambda_a + \lambda_v$, where $\lambda_a$ is the thermal conductivity of the air and $\lambda_v$ accounts for the heat movement by vapour across the gas-filled pore. For water contents above 0.20, the air in the soil water pores is considered to be saturated and a value of 0.176 mCal cm-1 sec-1 °C-1 is used for $\lambda_v$. It is assumed that the value of $\lambda_v$ decreases linearly from 0.176 mCal cm-1 sec-1 °C-1 at a moisture content of 0.2 to 0. at oven-dryness. For quartz and solid particles, $g_j$ is set equal to 0.125, 0.125, 0.750 respectively. For organic matter $g_1=g_2=0.5$, while $g_3=0.0$ Values of $g_1$ and $g_2$ for the air particles were assumed to decrease linearly from 0.333 in water saturated soil to 0.105 at a soil water content of 0.2. Below this water content, $g_1$ and $g_2$ were assumed to decrease linearly to a value of 0.015 at oven dryness.
+\section{Numerical solution of the heat flow equation}
+
+
+\subsection {The solution procedure}
+
+The right hand term of Eq.(106) is expanded as a Taylor series and rearranged in an implicit central difference scheme:
+\begin{equation}
+\begin{split}
+\frac{\partial}{\partial x} \left(\frac{\lambda (\theta) }{\rho C_p} \cdot \frac{\partial T}{\partial x}\right) = 
+\frac{1}{x_{i+1} - x_{i-1}} \left(\frac{\lambda^{j-1/2}_{i-1/2} (T^{j-1}_{i-1} + T^{j}_{i-1}+ T^{j-1}_{i}+T^{j}_{i})}{2 \cdot \rho_{i-1/2} \cdot C_p^{j-1/2}_{i-1/2} \cdot(x_i - x_{i-1})}\right) - \\
+\left(\frac{\lambda^{j-1/2}_{i+1/2} (T^{j-1}_{i} + T^{j}_{i} T^{j-1}_{i+1}+T^{j}_{i+1})}{2 \cdot \rho_{i+1/2} \cdot C_p^{j-1/2}_{i+1/2} \cdot(x_{i+1} - x_{i})}\right)
+\end{split}
+\end{equation}
+Equation (110) is formulated for each node. The rearranged system of linear equations has a tri-diagonal form and can be solved using the Thomas algorithm (Remson et al., 1978). 
+
+\subsection {Definition of the upper boundary condition}
+
+The upper boundary condition for the soil temperature is defined using the method of Kirkham and Powers (1972). The method considers the daily variation of soil temperature at the surface as a result of the fluctuation of the daily solar radiation. The foregoing is described using a sine function:
+
+\begin{equation}
+T = T_a + \gamma \cdot sin\left( \frac{2 \pi t}{p}\right)
+\end{equation}
+
+where T is the actual soil surface temperature ($^\circ C$),Ta is the daily average soil surface temperature ($^\circ C$), g is the amplitude of the soil surface temperature ($^\circ C$) (usually taken equal to the difference between maximum and minimum temperature), p is the period for completing one cycle (usually one day) and t the time (day).
+
+\subsection {Definition of the lower boundary condition}
+
+For the lower boundary condition, a constant soil temperature (default fixed at 7$^\circ C$) is assumed.
+
+\section{References}
+
+de Vries, D.A., 1952. The thermal conductivity of soil. Meded. Landbouwhogeschool, Wageningen, 52, 72 pp.
+
+Kirkham, D., and W.L. Powers, 1972. Advanced soil physics. John Wiley and Sons, N.Y.
+
+Remson, I., G.M. Hornberger and F.J. Molz, 1978. Numerical methods in subsurface hydrology. Wiley Interscience, N.Y., 389 pp.
+
+Skaggs, R.W. and E.M. Smith, 1967. Apparent thermal conductivity of soil as related to soil porosity. Paper 67-114 presented at the Annual meeting of the ASAE at Saskatoon, Skatchewan, 27-30 June.
+
+Tillotson, W.R., C.W. Robbins, R.J. Wagenet and R.J. Hanks, 1980. Soil, water, solute and plant growth simulation. Bulletin 502, Utah State Agr. Exp. Stn. Logan, Utah, 53 pp.
+
+Wagenet, R.J. and J.L. Hutson, 1989. LEACHM, a process based model of water and solute movement, transformations, plant uptake and chemical reactions in the unsaturated zone. Centre for Env. Res., Cornell University, Ithaca, N.Y., 147 pp.
+
+Wierenga, P.J., D.R. Nielsen, and R.M. Hagan, 1969. Thermal properties of a soil based upon field and laboratory measurements. Soil Sci. Soc. Am. Proc., 33:354-360.

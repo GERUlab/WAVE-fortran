@@ -1,0 +1,854 @@
+\chapter{The water transport module}
+\section{ The soil water flow equation}
+In the absence of plants, the soil field water balance can simply be written as:
+\begin{equation}
+\Delta W = (P + I + U) - (R + E+D)
+\end{equation}
+
+where $\Delta$W is the change in water content (mm) in the soil volume (set equal to the soil profile volume), P the precipitation (mm), I the irrigation depth applied (mm), U the upward capillary flow into the soil profile (mm), R the water depth lost by runoff (mm), E the actual evaporation (mm) and D the percolation or drainage depth. Generally, P and I are known system input, while U, R, E and D are unknown terms of the water balance. In order to quantify the unknown terms of the water balance, the soil water flow equation is solved.\\
+
+For homogeneous isotropic isothermal rigid porous media one-dimensional water transport in an infinitesimal small soil element can be described using the Richards equation (Jury et al., 1991):
+
+\begin{equation}
+\frac {\partial \theta}{\partial t}= \frac{\partial}{\partial z}\left(K(\theta) (\frac{\partial h}{\partial z} + 1)\right)
+\end{equation}
+
+where $\theta$ is the volumetric water content (m3 m-3); z is the vertical co-ordinate (cm) defined as positive upward; t is the time (day); $K(\theta)$ is the hydraulic conductivity (cm day-1); h is the soil water pressure head (cm).
+
+Equation (2) combines the Darcian water flow equation with the water mass conservation law. By introducing the differential water capacity $C(h) = \partial \theta/ \partial h$, which represents the slope of the water retention curve, and by expressing the hydraulic conductivity as a function of the pressure head one can convert Eq. (2) to a differential equation with only one unknown h:
+
+\begin{equation}
+C(h) \frac {\partial h}{\partial t}= \frac{\partial}{\partial z}\left(K(h) \left(\frac{\partial h}{\partial z} + 1\right)\right)
+\end{equation}
+
+Equation (3) is applicable for both unsaturated and saturated flow conditions. In the first case this equation is parabolic, whereas in the second case (C(h)=0) it reduces to an elliptic differential equation. Because both the hydraulic conductivity and the differential water capacity are non linear functions of h, Eq.(3) is non-linear. Analytical solutions of Eq.(3) only exist for specific boundary conditions (see Philip et al., 1957; amongst others). To handle more general flow situations, a numerical solution is applied in the WAVE- model to solve the soil water flow equation.
+
+\section{ The soil hydraulic properties}
+
+
+\subsection{ The soil moisture retention characteristic}
+
+To solve the flow equation Eq. (3), the moisture retention ($MRC = \theta(h)$) and hydraulic conductivity ($HCC = K(\theta) $ or $ K(h)$) functions need to be specified. A parametric model is available to describe the shape of the MRC. In addition to the widely used non-hysteretic retention models, some parametric hysteresis models are available in WAVE. Since the beginning of the century (Haines, 1930), it is known that the MRC of a soil is hysteretic i.e. the moisture content corresponding to a certain pressure head depends on the drying or wetting history. Hysteresis is caused by the irregular geometry of a pore, air inclusions in the soil matrix, shrinking and swelling characteristics (Childs, 1969). It has been observed that the occurrence of hysteresis substantial influence on the calculated water fluxes (Russo et al., 1990; Jones et al., 1990).\\
+
+When no hysteresis is assumed, moisture retention in the WAVE-model is described using the power function model of van Genuchten (van Genuchten, 1980; van Genuchten and Nielsen, 1985):
+
+\begin{equation}
+\theta(h) =  \theta_r + \frac{\theta_s - \theta_r}{(1+(\alpha|h|)^n)^m}
+\end{equation}
+
+where $\theta_s$ is the saturated volumetric soil water content (m3 m-3); qr is the residual volumetric soil water content (m3 m-3); a is the inverse of the air entry value (m-1); and n, m are shape parameters (-). Fig. 5 illustrates a physical interpretation of the parameters of Eq.(4) with exception of the m parameter which characterises the asymmetry.\\
+
+
+Fig.5: Moisture retention characteristic as described by the van Genuchten model (van Genuchten et al., 1980)\\
+
+When modelling the water balance of a field soil, the correct definition of the parameters of the MRC is crucial. If simultaneously measured moisture content and pressure head data are available, one can use these measurements to fit the parameters of Eq.(4) using non-linear optimisation techniques. Therefore, one can develop his own programmes using e.g. statistical software or spreadsheet programmes. Alternatively, one can use special softwares (e.g. van Genuchten, 1991).\\
+
+In many cases, no measurement data of the MRC are available and so one needs an indirect estimate of the MRC parameters. For a range of soils, Vereecken et al. (1989) found that the MRC can reasonably well be estimated by assuming a symmetrical moisture retention characteristic (or m=1). Pedo-transfer functions, relating the remaining parameters of Eq.(4) to basic soil properties such as texture, soil organic carbon and others, were developed and validated (Vereecken et al., 1989; Vereecken et al., 1992; Tietje and Tapkenhinrichs, 1993). The following multiple regression pedo-transfer functions, taken from Vereecken et al., (1989) can be used to estimate the parameters of Eq.(4):\\
+\begin{eqnarray}
+\nonumber
+\theta_s &=& 0.81 - 0.283(Bd) + 0.001(Cl)\\ 
+\theta_r &=& 0.015 +0.005(Cl) + 0.0014(C)\\
+\nonumber
+ln (\alpha) &=& -2.486 + 0.025(Sa) - 0.351(C) - 0.2617(Bd) - 0.023(Cl)\\
+\nonumber
+ln(n) &=& 0.053 - 0.009(Sa) -0.013(Cl) +0.00015(Sa)^2
+\end{eqnarray}
+
+where Bd is the soil bulk density (g cm-3); C = the carbon content (perc)
+Sa = the sand content (fraction 50-2000m in perc); Cl = the clay content (fraction £ 2 m in perc).\\
+
+When hysteresis of the MRC is considered, four types of relations should be distinguished. If desorption starts from saturation, the main drying branch of the MRC ($\theta^d$) is obtained. Branching from this curve results in a primary wetting curve ($\theta_1^w$) which in turn leads to a secondary drying curve ($\theta_2^d$) upon drying. All curves that once originated from the main drying curve are either uneven order wetting curves ($\theta_n^w$, with n=1,3,...) or even order drying curves ($\theta_n^d$, with n= 2,4,...). In the same way, branching from the main wetting curve ($\theta^w$) can only result in uneven drying curves ($\theta_n^d$, with n=1,3,...), or even wetting curves ($\theta_n^w$, with n=2,4,...).\\
+
+In the WAVE-model, the second model reported by Mualem (1974) is included to describe the MRC. This model was found to be one of the most accurate in a comparative study of hysteresis models (Viaene et al., 1994). Mualem's model is a two branch, conceptual model. The conceptual foundation for the model is the independent domain theory of hysteresis (Néel, 1942-1943). As a two branch model, the model describes the moisture content on a curve of the MRC as a function of the moisture content on the two main curves. In the comparative study of hysteresis models, it was found that the main loop can be considered as a primary wetting loop without significant loss of accuracy. This implies that only two groups of scanning curves need to be considered: uneven order wetting curves and even order drying curves. For an uneven order wetting scanning curve branching from a drying curve at $\theta_{n-1}(h_\Delta)$, the moisture content $\theta_n^w(h)$ can be calculated as:\\
+
+\begin{equation}
+\theta^w_n(h) = \theta^d_{(n-1)} (h_\Delta + (\theta^w(h) - \theta^w(h_\Delta)\left(\frac{\theta_s - \theta^d(h_\Delta)}{\theta_s - \theta^w(h_\Delta)}\right) 
+\end{equation}
+where qdn-1(hD) and hD are respectively the water content and pressure head at the transition from the previous drying curve to the present wetting curve; qw(h) is the main wetting curve; qd(h) is the main drying curve; and qs, the saturated moisture content. Similarly, an even order drying scanning curve branching from a wetting curve at qwn-1(hD) can be calculated as:
+
+\begin{equation}
+\theta^d_n(h) = \theta^w_{(n-1)} (h_\Delta - (\theta^w(h_\Delta) - \theta^w(h)\left(\frac{\theta_s - \theta^d(h)}{\theta_s - \theta^w(h)}\right) 
+\end{equation}\\
+
+where $\theta^w_{n-1}$ and $h_\Delta$ are respectively the water content and the pressure head at the transition from the previous wetting curve to the present drying curve; and $\theta^w_{n-1}(h)$ is the previous wetting curve.\\
+
+The $\theta^d(h)$ and $\theta^w(h)$ relationships are described with the van Genuchten model (Eq.(4)). Assuming a closed main loop implies the same residual and saturated moisture content for the main drying and wetting curve. Practical application of the model revealed that a different choice of n and m for the main curves results in numerical errors. Therefore the n and m parameters are default equal for both main retention curves. A hysteresis model needs to be combined with a $K(\theta)$ model since the $K(h)$ relationship is also hysteretic. A common choice is the use of Mualem's conductivity model (cf. infra). For the use of this model, and hence for the use of Mualem's hysteretic retention model, the m parameter is restricted to $m = 1 - 1/n$. So, the only parameter differing between the main wetting and drying curve is a. For the main drying curve, ad is the inverse of the air entry point, while for the main wetting curve aw is the inverse for the water entry point. If Mualem's two branch model is used, one needs to input aw as additional parameter to the parameters of Eq.(4). In Fig.6 the effect of different values of n, m, aw and ad are illustrated for the main loop and a small primary wetting - secondary drying loop. Notice the increase of the main loop area when a large $a^w/a^d$ and large n, m are selected.\\
+
+Fig. 6: Examples of hysteretic moisture retention characteristic, for a range of ad, aw and n, m values\\
+
+In many situations only the main drying curve of the MRC is determined. In those cases the rule of thumb aw/ad = 2 can be used (Kool and Parker, 1987). Alternatively, one can use Mualem's universal hysteresis model to estimate the main drying loop from the main wetting (Mualem, 1977):\\
+
+\begin{equation}
+\theta_d(h) = (2 \cdot \theta_s - \theta_w(h) - \theta_r) \cdot \left(\frac{\theta_w(h)-\theta_r}{\theta-s - \theta_r}\right) + \theta_r
+\end{equation}
+
+This model is available in the WAVE-model. As input for this MRC model, the user specifies the parameters of Eq. (4) for the main wetting curve.\\
+
+When applying Eq.(4), it is assumed that the pore-size distribution of the soil matrix follows a mono-modal distribution. Multi-porosity systems, assuming that the matrix system is the combination of different mono-modal systems, are more flexible in describing accelerated flow phenomena (preferential flow) in soils (Gerke and van Genuchten, 1993; Durner, 1994). The multi-porosity model available in the WAVE-model, assumes that the complete MRC curve in a multi-porous system can be described by the sum of separate mono-modal MRC's, similar to Eq.(4):\\
+\begin{equation}
+	Se = \sum_{i=1}^n \frac{w_i}{\left(1+(\alpha_i h)^{n_i}\right)^{m_i}} =  \sum_{i=1}^n w_i S_i
+	\end{equation}
+where wi are the weights of the individual partial MRC's Si, with Swi=1. The saturation degree is a dimensionless moisture content and is defined as:\\
+
+\begin{equation}
+	Se = \frac{\theta - \theta_r}{\theta_s - \theta_r}
+	\end{equation}\\
+	
+An example of a multi-porous MRC is given in the Fig.7. When using the multi-porous MRC, ai, ni, mi and wi parameter need to be specified for each partial MRC, while qr and qs are needed to rescale Se back to volumetric moisture contents $\theta$.\\
+
+
+Fig. 7: Bi-modal moisture retention characteristic as described with the sum of two van Genuchten equations\\
+
+\subsection{ The hydraulic conductivity relationship}
+
+Just like for the MRC, conceptual, empirical or hybrid parametric models have been cited in literature to describe the hydraulic conductivity (HCC) functions of soils. The HCC can be expressed in terms of pressure head (h), volumetric moisture content ($\theta$) or effective saturation (Se). The different mono-modal models for the HCC which are available in the WAVE-model are listed in Table 1.\\
+
+\input{table1.tex}
+
+Table 1: Hydraulic conductivity models available in the WAVE-model\\
+
+The parameters of the HCC again can be fitted using optimisation techniques if measurements of the HCC at different moisture contents (or h or Se) are available. Different field and laboratory techniques are at hand to measure discrete points of the HCC, though still no standardised technique is available to yield an effective HCC. All parametric models use Ksat (the saturated hydraulic conductivity value) as first point of the hydraulic conductivity curve. The definition of an effective saturated conductivity is a tedious task. Ksat is strongly influenced by structural phenomena resulting from e.g. worm activity, crop roots, etc. So, the Ksat is behaving as a random variable rather than a deterministic property within the field. Hence, measurements of Ksat are varying tremendously within a field. Therefore it is suggested to measure Ksat slightly below saturation to exclude wormholes or cracks. This value can be obtained from e.g. sorption infiltrometer data.\\
+
+When comparing different conductivity models for the description of the HCC, Gardner's model (1958) turned out to performe well for Belgian conditions (Vereecken et al., 1990), though the exponential Gardner model is more widely used to describe the HCC of undisturbed soils. For the Gardner model (1958), the following pedo-transfer function can be used if no good measurement of Ksat is available:\\
+
+\begin{eqnarray}
+\nonumber
+ln(K_{sat}, e) &=& 20.62 -0.96 \cdot ln(Cl) - 0.66 ln(Sa) - 0.46 \cdot ln(C) - 8.43 \cdot bd\\
+ln(b) &=& -.73 - 0.01877 \cdot Sa + 0.058 \cdot Cl\\
+\nonumber
+ln(N) &=& 1.186 - 0.194 * ln(Cl) - 0.0489*ln(Si)
+\end{eqnarray}
+
+where $K_{sat}$,e is the estimate of the saturated hydraulic conductivity (cm day-1), Cl, Sa and Si the clay ($<2 \mu$), sand ($50-2000 \mu$) and silt ($2-50 \mu$) content (perc), Bd the soil bulk density (g cm-3) and C the organic carbon content (perc). The explanation of the pedo-transfer function of the observed variation increases if a measurement of the saturated hydraulic conductivity is included as predictor variable. In this case the following equations can be used to estimate Gardner's parameters:
+
+\begin{eqnarray}
+\nonumber
+ln(K_{sat}, e) &=& ln(Ksat,m)\\
+ln(b) &=& -2.640-0.019 \cdot Sa +0.05 \cdot Cl + 0.506 \cdot ln(K_{sat},m)\\
+\nonumber
+ln(N) &=& 1.186 - 0.194 * ln(Cl) - 0.0489*ln(Si)
+\end{eqnarray}
+
+where Ksat,m is the measurement of the saturated hydraulic conductivity curve (cm day-1).
+
+The theoretical HCC model of van Genuchten (1980) is a particular solution of the general statistical pore size distributed conductivity model of Mualem (1976). It uses the same parameters as for the MRC, though with the restriction that m must be equal to 1-1/n. This HCC model is theoretically well elaborated. In practice, however, the resulting $K(\theta)$-curve is very susceptible to the Ksat value. If only Ksat is measured, the typical difficulties with Ksat measurements (effect of sample size, high short-range variation, continuous cracks/pores through samples) can yield unrealistic $K(\theta)$--curves. So one should be tremendously careful when using this indirect estimation model to estimate the HCC.
+
+When modelling the field water balance with a multi-porosity system, the closed form expression of the van Genuchten-Mualem HCC needs to be replaced by the general Mualem model (Mualem, 1976):
+
+\begin{equation}
+K(h) = K_{sat} \cdot Se^\lambda \left(\frac{\int_0^{Se} \frac{1}{h(Se)}dSe}{\int_0^{1} \frac{1}{h(Se)}dSe}\right)^2
+\end{equation}
+
+where the h(Se) curve is the inverse of the MRC curve. When a multi-modal MRC is assumed, the inverse of the MRC, h(Se), cannot be calculated directly. Therefore, the integrals in Eq.(19) need to be solved numerically. Substituting Eq. (9) in the denominators of Eq.(19) yields:
+
+\begin{equation}
+\int_0^{Se} \frac{1}{h(Se)} dSe = \int_{-\infty}^h\frac{1}{h(Se)} \cdot \frac{\partial Se}{\partial h} \cdot dh
+\end{equation}
+
+which can be reduced to  
+\begin{equation}
+\nonumber
+\int_{-\infty}^h \frac{1}{h(Se)} \left(\sum w_i \frac{\partial Si}{\partial h}\right)dh = \sum w_i \int_{-\infty}^h \frac{1}{h(Se)} \left(\frac{\partial Si}{\partial h}\right)dh
+\end{equation}
+and finally into\\
+\begin{center}
+$\sum w_i \int_{-\infty}^{Si} \frac{1}{h(Se)} dSi $
+\end{center}
+
+or the integral of the multi-porous 1/h curve is the weighed sum of integrals for the partial 1/h curves. The integral of the partial 1/h curve can be solved by inversion (van Genuchten and Nielsen, 1985):
+
+\begin{equation}
+\int_0^{Si} \frac{1}{h(Se)} dSi = \int_0^{Si}\left(\frac{x^{1/m}}{1-x^{1/m}}\right)^{1/n} dx
+\end{equation}
+
+The substitution $x= y^m$ reduces Eq.(21) to:
+
+\begin{equation}
+\int_0^{Si} \frac{1}{h(Se)} dSi = m\int_0^{Si^{1/m}} y^{m-1+1/n}(1-y)^{-1/n}dy = mI_\zeta(p,q) \cdot B(p,q)
+\end{equation}
+
+where $I_\zeta(p,q)$ is the Incomplete Beta function and $B(p,q)$ is the Complete Beta function, and $\zeta=Se(1/m)$,$ p=m+1/n$ and $q=(1-1/n)$. The Incomplete Beta function in the WAVE-model is evaluated numerically using continued fractions (see e.g. van Genuchten, 1991):
+
+\begin{equation}
+I_\zeta (p,q)
+\end{equation}
+
+where
+
+\begin{eqnarray}
+d_{2m+1} &=& \frac{-(p+q)(p+q+m)}{(p+2m)(p2m+1)}\cdot \zeta\\
+d_{2m} &=& \frac{m(q-m)}{(p+2m-1)(p2m)}\cdot \zeta
+\end{eqnarray}
+
+
+\section{Numerical solution of the water flow equation}
+
+\subsection{ The solution procedure}
+
+In order to solve Eq.(3) numerically, the soil profile is discretised into a number of compartments and the total time period into discrete time increments (time steps) of unequal lengths. The soil compartments are grouped in different pedological layers (cf. Fig. 3). For each soil layer, the parameters of the MRC and HCC are specified. In this way, the partial derivatives of Eq.(3) can be approximated as ratio's of finite differences. An implicit discretisation scheme with explicit linearisation of the conductivity and the differential moisture capacity is used. In a comparative study of 6 different discretization methods, Haverkamp et al. (1977) found that the implicit schemes are superior in terms of applicability and efficiency. Furthermore Huwe and van der Ploeg (1988) observed that the explicit methods fail in case of saturated conditions. With this implicit difference scheme Eq.(3) can be approximated as:
+
+\begin{equation}
+C_i^j \frac{h_i^{j+1} - h_i^j}{\Delta t} = \frac{K^j_{i-1/2}\left(\frac{h_{i-1}^{j+1} - h_i^{j+1}}{\Delta z_i^*}+1\right) - 			  K^j_{i+1/2}\left(\frac{h_{i}^{j+1} - h_{i+1}^{j+1}}{\Delta z_{i+1}^*}+1\right)}{\Delta z_i}
+\end{equation}
+
+where :
+\begin{equation}
+\Delta z_i = z_{i-1/2} - z_{i+1/2}
+\end{equation}
+
+is the thickness of the i-th compartment (mm);
+\begin{equation}
+\Delta z_i^* = Z_{i-1} - z_{i}
+\end{equation}
+is the distance between the nodes (mm); and
+\begin{equation}
+\Delta t = t^{j+1} - t^j
+\end{equation}
+is the length of the time step (day).
+
+
+Pressure heads are considered only at specific nodes in the time-depth space. The subscript i refers to the depth position, whereas j refers to the position on the time axis. The position of the variables h, K, and C in the numerical solution grid is illustrated in Fig. 8. Nodal points are situated in the middle of the compartments.\\
+
+Fig. 8: Numerical grid, with location of pressure heads h (o), hydraulic conductivity K (x) and differential water capacity (+) as used in the finite difference equation (Eq. 26)\\
+
+For the hydraulic conductivity between the nodal points, the geometric mean is taken as proposed by Vauclin et al. (1979):\\
+
+\begin{eqnarray}
+\nonumber
+K_{i-1/2}^j = \sqrt{K(h_{i-1}^j) \cdot K(h_{i}^j)}\\
+K_{i+1/2}^j = \sqrt{K(h_{i}^j )\cdot K(h_{i+1}^j)}
+\end{eqnarray}
+As can be seen in Eq. 26 and Fig.8, the term $\partial h / \partial z$ is evaluated at the end of the time step (implicit discretisation), whereas K and C are set equal to their values at the beginning of the time step (explicit linearisation of K and C). This scheme implies that the equation, which can be written for node i, contains three unknowns ($h_{i-1}^{j+1}$, $h_i^{j+1}$ and $h_{i+1}^{j+1}$). Rearranging Eq.(26) in terms of these unknowns, yields:
+
+\begin{equation}
+-d_i h_{i-1}^{j+1} + b_i h_i^{j+1} - a_i h_{i+1}{j+1} = e_i
+\end{equation}
+where:
+\begin{eqnarray}
+a_i &=& \frac{\Delta t}{\Delta z_i \Delta z_{i+1}^*} K_{i+1/2}^j\\
+\nonumber
+b_i &=& C_i^j + \frac{\Delta t}{\Delta z_i \Delta z_{i+1}^*} K_{i+1/2}^j + \frac{\Delta t}{\Delta z_i \Delta z_{i+1}^*} K_{i-1/2}^j\\
+\nonumber
+c_i &=& \frac{\Delta t}{\Delta z_i \Delta z_{i}^*} K_{i-1/2}^j\\\
+\nonumber
+e_i &=& C_i^j h_i^j - \frac{\Delta t}{\Delta z_i} K^j_{i+1/2} + \frac{\Delta t}{\Delta z_i} K^j_{i-1/2}
+\end{eqnarray}
+
+
+Equation (31) is written for each node, except for the top and bottom one. As will be explained later, a similar equation can be developed for these boundary nodes. For the top node, Eq.(26) reduces to:
+
+\begin{equation}
+b_1 h_1^j+1 - a_1 h_2^{j+1} == e_1
+\end{equation}
+
+where for the bottom node:
+
+\begin{equation}
+-d_n h_{n-1}^{j+1} + b_n h_n^{j+1} = e_n
+\end{equation}
+In this way, the n pressure head values at the end of each time step (subscript j+1) are derived from the pressure head profile at the beginning of the time step and information of the boundary conditions, by solving a system of n equations having the following form:
+\begin{equation}
+\begin{pmatrix}
+b_1 & -a_1 & 0 &. &.  &0\\
+-d_2 & b_2 & -a_2 &0 &. &. \\
+0 & -d_3 & b_3 &-a_3 &0 &. \\
+. & 0 &. &. &. &. \\
+. & . & -d_i &b_i &-a_i &. \\
+. & . & 0 &. &. &0 \\
+. &.  & . &-d_{n-1} &b_{n-1} &-a_{n-1} \\
+0 & .& . &0 &0 &-d_n &b_n \\
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+h_1^{j+1}\\ h_2^{j+1}\\ h_3^{j+1}\\.\\h_i^{j+1}\\.\\h_{n-1}^{j+1}\\h_n^{j+1}\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+e_1\\e_2\\e_3\\.\\e_i\\.\\e_{n-1}\\e_n\\
+\end{pmatrix}
+
+\end{equation}
+
+To solve this tridiagonal system of linear equations, the Thomas algorithm which is a direct non-iterating solution technique is used (see e.g. Remson et al., 1971). Once the pressure head profile at the end of the time step is calculated, the corresponding water content profile is obtained by using the MRC. Next, the whole procedure is repeated for the next time step.
+
+However, as a result of the explicit linearisation of the differential water capacity, mass balance errors occur, especially in case of large water content changes and nearly saturated moisture conditions. As stated before, the ¶q/¶t derivative in Eq.(2) has been replaced by C(h).¶h/¶t (Eq.(3)), which in turn is approximated by its finite difference analog (Eq.(26)):
+
+\begin{equation}
+C(h) \frac{\partial h}{\partial t} \approx C_i^j \frac{h_i^{j+1} - h_i^j}{\Delta t}
+\end{equation}
+
+Hence, a mass balance error resulting from this explicit linearisation of C is made which is equal to:
+\begin{equation}
+(\theta_i^{j+1} - \theta_i^j) - C_i^j(h_i^{j+1} - h_i^j)
+\end{equation}
+In order to reduce these mass balance errors, the Newton-Raphson solution technique is used in the WAVE-model. The Newton-Raphson technique (see e.g. Carnahan et al., 1969) is an iterating solution method for a system of non-linear equations, and has the following form:
+
+\begin{equation}
+F_i(\overline{X}) = 0
+\end{equation}
+
+for i=1,...,n; with $\overline{X} = (x_1,...,x_n)$ the vector of unknowns. If the function values are known for a given vector $t = (x_1^\tau,...,x_n^\tau)$, the function values $F_1,...,F_n$ for a vector t+1 in the neighbourhood of the first one can be approximated by using a first order Taylor series expansion around t:
+
+%(39)
+\begin{equation}
+F_i(\overline{X}^{\tau +1}) = F_i(\overline{X}^{\tau}  + \sum_{k=1}^n \frac{\partial F_i(\overline{X}^{\tau})}{\partial x_k}(x_k^{\tau + 1} -x_k^\tau)
+\end{equation}
+
+If t is known as approximate solution of Eq.(26), an improvement can be obtained by solving Fi(t+1)=0, using the Taylor expansion given by Eq.(39). This means that successive improvements of the solution can be obtained by solving the following system of linear equations:
+
+	%(40)
+	\begin{equation}
+	\begin{pmatrix}
+	F_1(\overline{X}^{\tau +1}) \\ . \\.\\ . \\.\\ . \\.\\	F_n(\overline{X}^{\tau +1})
+	\end{pmatrix}
+	+
+\begin{pmatrix}
+\frac{\partial F_1(\overline{X}^{\tau})}{\partial x_1} &. &. &\frac{\partial F_1(\overline{X}^{\tau})}{\partial x_n}\\
+. &. &. &.\\
+. &. &. &.\\
+. &. &. &.\\
+. &. &. &.\\
+. &. &. &.\\
+. &. &. &.\\
+\frac{\partial F_n(\overline{X}^{\tau})}{\partial x_1} &. &. &\frac{\partial F_n(\overline{X}^{\tau})}{\partial x_n}\\
+\end{pmatrix}
+\cdot
+	\begin{equation}
+	\begin{pmatrix}
+x_1^{\tau+1} - x_1^{\tau} \\ . \\.\\ . \\.\\ . \\.\\	x_n^{\tau+1} - x_n^{\tau} 
+	\end{pmatrix}
+=0
+\end{equation}
+
+
+where $\overline{X}^{\tau+1}=(x_1^{t+1},....,x_n^{t+1}) $being the unknowns.
+
+Let's consider the q-formulation of the water flow equation given by Eq.(2). The finite difference analog of this equation is similar to Eq.(26) and is rearranged in the form $F_i(H) = 0$ with $H = (h_1^{j+1},...,h_n^{j+1})$ being the vector of unknown pressure heads:
+
+	%(41)
+	\begin{equation}
+F_i(\overline{H}) = \frac{\theta_i^{j+1} -\theta_i^j}{\Delta t} - \frac{K^j_{i-1/2}\left(\frac{h_{i-1}^{j+1}-h_{i}^{j+1} }{\Delta z_i^*}+1\right) - K^j_{i+1/2}\left(\frac{h_{i}^{j+1}-h_{i+1}^{j+1} }{\Delta z_{i+1}^*}+1\right)}{\Delta z_i}
+\end{equation}
+
+
+This finite difference equation for node i is in fact the mass balance equation for compartment i. The solution of this system of equations yields an exact internal mass balance. Because qij+1 is strongly dependent on the unknown hi+1j (non-linear q(h)), this equation is non-linear and the Newton-Raphson method offers the possibility to solve it in an iterative way. Assume Hj+1,t = (h1j+1,t,...,hnj+1,t) is the t-th approximate solution of the systems of non-linear equations. A better solution is obtained by solving:
+
+%	(42)
+\begin{equation}
+F_i(\overline {H}^t) + \sum_{k=1}^n\frac{\partial F_i (\overline{H}^t)}{\partial h_k} (h_k^{j+1,t+1}- h_k^{j+1,t} = 0
+\end{equation}
+
+
+Equation (42) is obtained by combining Eq. (40) with (41). The partial derivatives can easily be derived from Eq.(41):
+
+%	(43)
+\begin{eqnarray}
+\frac{ \partial F_i(\overline {H}^{j+1})}{\partial h_i^{j+1}} &=& \frac{1}{\Delta t} \frac{\partual \theta ^{j+1}_i}{\partial h_i^{j+1}} + \frac{K_{i-1/2}^j}{\Delta z_i \Delta z_i^*} + \frac{K_{i+1/2}^j}{\Delta z_i \Delta z_{i+1}^*}\\
+\nonumber
+\frac{ \partial F_i(\overline {H}^{j+1})}{\partial h_{i-1}^{j+1}} &=&  \frac{K_{i-1/2}^j}{\Delta z_i \Delta z_i^*}\\
+\nonumber
+\frac{ \partial F_i(\overline {H}^{j+1})}{\partial h_{i+1}^{j+1}} &=&  \frac{K_{i+1/2}^j}{\Delta z_i \Delta z_{i+1}^*}\\
+\nonumber
+\frac{ \partial F_i(\overline {H}^{j+1})}{\partial h_{k}^{j+1}} &=&  0
+\end{eqnarray}
+for $k < i-1$ or $k > i+1$
+
+
+After replacing the partial derivatives in Eq.(42) and rearranging in terms of the unknowns $h_1^{j+1,t+1}$,...,$h_n^{j+1,t+1}$ one obtains an improved approximation by solving the following tridiagonal system of linear equations :
+
+%	(44)
+\begin{equation}
+-d_i(h_{i-1}^{j+1})^{t+1} + b_i(h_i^{j+1})^{t+1} - a_i(h_{i+1}^{j+1})^{t+1} = e_i
+\end{equation}
+for $i=2,...,n-1$
+
+
+where:
+
+%	(45)
+\begin{eqnarray}
+a_i &=& \frac{\Delta t}{\Delta z_i \Delta z_{i+1}^*}(K_{i+1/2}^{j+1})^t\\
+\nonumber
+b_i &=& (C_i^{j+1})^t + \frac{\Delta t}{\Delta z_i \Delta z_{i+1}^*}(K_{i+1/2}^{j+1})^t + \frac{\Delta t}{\Delta z_i \Delta z_{i+1}^*}(K_{i-1/2}^{j+1})^t\\
+\nonumber
+d_i &=& \frac{\Delta t}{\Delta z_i \Delta z_{i}^*}(K_{i-1/2}^{j+1})^t\\
+\nonumber
+e_i &=& (C_i^{j+1} h_i^j)^t - ((\theta_i^{j+1})^t-\theta_i^j) - \frac{\Delta t}{\Delta z_i}(K_{i+1/2}^{j+1})^t + \frac{\Delta t}{\Delta z_i}(K_{i-1/2}^{j+1})^t
+\end{eqnarray}
+
+
+Equation (44) is very similar to Eq.(31), the only difference is the additional (qi, j+1,t -qi,j) term in coefficient ei, and the fact that C and K are now evaluated at time j+1. Again, two additional equations, similar to Eq.(33) and Eq.(34) are written for the top and bottom nodes. The resulting tridiagonal system consists of n linear equations with n unknowns which are solved directly by the same Thomas algorithm. The set of equations is solved for each iteration loop within the same time step. After each iteration, function values Fi(H), which are in fact the mass balance errors for the different compartments (m3 m-3 day-1), can be calculated. The iteration procedure continues as long as one or more internal mass balance errors exceed a predefined threshold value ERRmax. The solution algorithm is summarized as follows:
+
+\begin{enumerate}
+\item Given Hj, the pressure head profile at the beginning of the time step, the first approximation Hj+1,1 is calculated by solving Eq.(26).
+\item Repeat the following steps for t = 1,...,NITERmax.
+ 
+\begin{enumerate}
+\item Calculate the internal mass balance errors $Fi(H^t)$
+if all $Fi(Hj+1,t) < ERR_{max}$, end iteration loop and go to the next time step;
+            else continue the iteration loop.
+         \item Calculate an improved solution Hj+1,
+            t+1 by solving the system of linear equations given by Eq.(44) and the additional equations for the top and bottom nodes.
+  \end{enumerate}
+\item If the desired accuracy is not reached within NITERmax
+      iterations, then halve the time step size and repeat the calculations starting from step 1.
+      
+\end{enumerate}
+      
+\subsection{Definition of the upper boundary condition}
+
+As stated before, it is necessary to construct an additional equation for the first compartment, which has a form given by Eq.(33). The flow situation at the soil surface is determined by the infiltration or the evaporative flux. As long as the flow conditions at the soil surface are not limiting, the flux through the soil surface Qs equals:
+
+\begin{equation}
+Q_s = E_{pot} - \left(Rain + Irr + \frac{Pond - Intc}{\Delta t} \right)
+\end{equation}
+
+where: $Q_s$  is the potential flux through the soil surface, defined as positive upward (cm day-1); $E_{pot}$ is the potential soil evaporation rate (cm day-1) as determined by weather conditions and soil cover; Rain is the  precipitation rate (cm day-1); Irr is the irrigation amount (cm day-1); Pond is the ponding depth at the soil surface (cm) and Intc the storage capacity of the canopy (m).
+
+Most of the time, the boundary condition at the top is a flux condition (Neuman condition), with the flux calculated from Eq.(3):
+\begin{equation}
+K(h)\left(\frac{\partial h}{\partial z} +1 \right) = -Q_s(t)
+\end{equation}
+for z = 0\\
+ 
+However, in case of high rainfall (or irrigation) intensities, the soil surface becomes saturated and the infiltration capacity (=Ksat.gradient) limits the infiltration rate. If no ponding is assumed, the excess water runs off immediately. In this case, the pressure head at the surface is put to zero. When ponding occurs, the pressure head at the soil surface increases until a maximal ponding depth, specified by the user, is reached. The maximal ponding depth reflects the surface micro-catchment when the soil surface roughness is high. When the maximal ponding depth is reached, the excess water runs off. In both cases, the flux type boundary condition switches to a pressure head condition (Dirichlet) for the node at the surface (hs=0 or hs=ponding depth).
+
+A similar phenomenon is encountered in case of prolonged soil evaporation without rewetting. In the beginning the upward flux is equal to the evaporative demand. At a given moment the top soil becomes so dry (low hydraulic conductivity) that the upward flux through the soil surface becomes smaller than the evaporative demand. This implies that the actual soil evaporation rate (Eact) becomes smaller than the potential rate (Epot). Reduction of the potential evaporation is simulated by changing from a flux to a pressure head condition. When the pressure head at the surface tends to become more negative than a value hairdry, corresponding with the potential of the air (»l/fonts -106 cm), the pressure head is fixed (hs = hairdry). The value hairdry is specified by the user.
+
+With the above concept, the appropriate top boundary condition for each time step depends on the moisture condition in the top soil at the beginning of the time step and the value of the flux Qs during that step. At the beginning of a time step, the program assumes the same condition as used in the foregoing time-step. After the soil moisture equation is solved accordingly, it is checked whether the choice was justified. In case of a flux condition, the pressure head at the surface is calculated using Darcy's equation:
+
+\begin{equation}
+h_s = h_1 + \Delta z_1^* \left(-\frac{Q_s}{K_0}-1 \right)
+\end{equation}
+
+where
+\begin{equation}
+\nonumber
+K_0 = \frac{K(h_s) + K(h_1)}{2}
+\end{equation}
+
+
+
+As long as the calculated hs remains within the interval ($h_airdry,0$), the choice for a flux condition is correct. If not, the calculations for the given time step are repeated with the appropriate pressure head condition.
+
+If a pressure head condition is adopted, the flux through the surface is calculated using the Darcy equation and compared to the 'potential' flux $Q_s$. In case of run-off and ponding ($h_s$, fixed), the actual infiltration should always be smaller than the potential infiltration rate (actual flux $> Q_s$, both fluxes being negative). A similar criterion is used in the case of a reduction of the soil evaporation in dry conditions. In this case the actual soil evaporation should remain smaller (less positive) than the potential rate (actual flux $< Q_s$). If these conditions are not fulfilled, calculations are repeated with a flux condition.
+
+With this algorithm, the soil moisture equation is solved with either a Dirichlet or a Neuman condition at the top. In case of a Dirichlet condition, the finite difference equation for the first node is the same as for the other ones (Eq.(26)), with the exception that the node above the first node is located at the surface (at a distance of half the compartment size), and that its pressure head is known ($h_{i-1} = h_s$):
+
+\begin{equation}
+C_i^j \frac{h_1^{j+1} - h_1^j}{\Delta t} = \frac{K_0 \left( \frac{h_s^{j+1} - h_1^{j+1}}{\Delta z_1^*} +1 \right) - K_{i+1/2}^j \left( \frac{h_1^{j+1} - h_2^{j+1}}{\Delta z_2^*} +1 \right) }{\Delta z_1}
+\end{equation}
+
+Rearranging in terms of the two unknowns, $h_1^{j+1} and h_2^{j+1}$, yields the following expressions:
+
+\begin{equation}
+b_1 h_1^{j+1} - a_1h_2^{j+1} = e_1
+\end{equation}
+where
+
+\begin {eqnarray}
+a_1 &=& \frac{\Delta t}{\Delta z_1 \Delta z_2^*} K^j_{1+1/2}\\
+\nonumber
+b_1 &=& C_1^j + \frac{\Delta t}{\Delta z_1 \Delta z_2^*} K^j_{1+1/2} + \frac{\Delta t}{\Delta z_1 \Delta z_1^*} K^j_{0}\\
+\nonumber
+e_1 &=& C_1^j h_1^j - \frac{\Delta t}{\Delta z_1 } K^j_{1+1/2}+\frac{\Delta t}{\Delta z_1} K^j_{0}+\frac{\Delta t}{\Delta z_1 \Delta z_1^*} K^j_{0}h_s^{j+1}
+\end{eqnarray}
+
+In case of a \textit{flux condition}, the equation for node 1 is written as:
+
+\begin{equation}
+C_1^j\frac{h_1^{j+1} - h_1^j}{\Delta t} = \frac{-Q_s - K^j_{1+1/2} \left(\frac{h_1^{j+1}-h_2^{j+1}}{\Delta_z_2^*}+1\right)}{\Delta z_1}
+\end{equation}
+
+As for the Dirichlet condition, this equation again contains only two unknowns, and can be written in the form:
+\begin{equation}
+b_1 h_1^{j+1} - a_1h_2^{j+1} = e_1
+\end{equation}
+where
+
+\begin {eqnarray}
+a_1 &=& \frac{\Delta t}{\Delta z_1 \Delta z_2^*} K^j_{1+1/2}\\
+\nonumber
+b_1 &=& C_1^j + \frac{\Delta t}{\Delta z_1 \Delta z_2^*} K^j_{1+1/2}\\
+\nonumber
+e1 &=& C_1^j h_1^j - \frac{\Delta t}{\Delta z_1 } K^j_{1+1/2}-\frac{\Delta t}{\Delta z_1} Q_s
+\end{eqnarray}
+
+\subsection{Definition of the Bottom boundary condition}
+
+To solve the water flow equation for the n nodes of a soil profile, the flow at the bottom boundary needs to be quantified. It is evident that the flow at the bottom of the soil profile is controlled by the geo-hydrological conditions. In the WAVE-model the flow situation at the bottom of the flow domain can be specified in seven different ways. These seven options are divided into four groups:\\
+
+\begin{enumerate}
+   \item A groundwater table is present:
+   \begin{itemize}
+   \item the groundwater level is given as a function of time;
+   \item the flux through the bottom of the soil profile is given as a function of time, the groundwater level is calculated;
+    \item the flux through the bottom of the soil profile is calculated with a
+   \end{itemize} flux-groundwater level relationship; the groundwater level is calculated.
+\item  The pressure head at the bottom is known as a function of time.
+\item  The flux through the bottom is known at each time step:
+\begin{itemize} 
+\item assumption of free drainage at the bottom;
+ \item zero flux.
+ \end{itemize}
+\item Lysimeter with free outflow at the bottom.
+
+
+The bottom boundary options offer the possibility to simulate a wide variety of flow situations. Before describing the options in detail, the formulation of the bottom boundary conditions as a flux or pressure head condition is given.\\
+
+If the flux at the bottom of the flow domain is known (Neuman condition), the boundary condition is given by:\\
+
+\begin{equation}
+K(h)\left(\frac{ \partial h}{\partial z}\right) = - Q(t)
+\end{equation}
+
+where Q(t) represents the flux (cm day-1, positive upward) at the bottom of the flow domain(z=-L).When combining Richards equation with Eq.(53), the following implicit finite difference equation for the bottom node n is obtained:
+
+
+
+Figure 9 gives the location of the variables involved in the finite difference equation.\\
+
+Fig. 9: Numerical grid, showing the location of the variables involved in the finite difference equation for the bottom compartment in case of a Neuman condition\\
+
+Rearranging in terms of the unknowns hn-1j+1 and hnj +1 yields:
+
+\begin{equation}
+-d_nh_{n-1}^{j+1} + b_n h_n^{j+1} = e_n
+\end{equation}
+
+where
+\begin{eqnarray}
+\nonumber
+b_n &=& C_n^j +\frac{\Delta t}{\Delta z_n \Delta z_n^*} K_{n-1/2}^j\\
+\nonumber
+d_n &=& \frac{\Delta t}{\Delta z_n \Delta z_n^*} K_{n-1/2}^j\\
+\nonumber
+e_n&=& c_n^j h^j_n + \frac{\Delta t}{\Delta z_n} Q_{n+1/2}^{j+1} +  \frac{\Delta t}{\Delta z_n} K_{n-1/2}^{j}
+\end{eqnarray}
+
+In case of a \textit{pressure head condition} at the bottom of the flow domain (Dirichlet condition), the finite difference equation for the bottom node n is identical to the equations for the other nodes:
+
+\begin{equation}
+C_n^j \frac{h_n^{j+1} - h_n^j}{\Delta t} = \frac{K_{n-1/2}^j \left( \frac{h_{n-1}^{j+1} - h_{n}^{j+1}}{\Delta z_n^*} + 1 \right) - K_{n+1/2}^j \left( \frac{h_{n}^{j+1} - h_{n+1/2}^{j+1}}{\Delta z_{i+1}^*} + 1 \right)}{\Delta z_i}
+\end{equation}
+
+In this case the new pressure head at node n+1 is already known. Rearranging in terms of the two unknowns $h_{n-1}^{j+}1$ and $h_n^{j+1}$ yields:
+
+\begin{eqnarray}
+b_n &=& C_n^j + \frac{\Delta t}{\Delta z_n \Delta z_n^*} K^j_{n-1/2}\\
+\nonumber
+d_n &=& \frac{\Delta t}{\Delta z_n \Delta z_n^*} K^j_{n-1/2}\\
+\nonumber
+e_n &=& C_n^j h_n^j + \frac{\Delta t}{\Delta z_n \Delta z_{n+1}^*} K^j_{n+1/2} h_{n+1/2}^{j-1} - \frac{\Delta t}{\Delta z_i} K^j_{n+1/2} + \frac{\Delta t}{\Delta z_i} K^j_{n-1/2} \\
+\end{eqnarray}
+
+
+In the next section it will be shown how, for each of the seven bottom boundary options, the flow situation can be reduced to a flux or pressure head condition.\\
+
+\textbf{Option 1: A constant or time variant groundwater level is present and the water level depth (mm) is specified by the user as a function of time}
+When a groundwater level is given, the pressure head at the groundwater depth is exactly known (h=0) but no information is available regarding the flow conditions at the bottom of the soil profile. The characterisation of the bottom boundary condition proceeds as follows. Initially, the unsaturated node above the water level is considered as bottom node during the current day. Next, the pressure head at the underlaying (saturated) node (n+1) is calculated assuming equilibrium (zero hydraulic gradient) with the water level :
+
+\begin{equation}
+h_{n+1}^{j+1} = W^{j+1} - z_{n+1}
+\end{equation}
+
+where $W_{j+1}$ is the position of the groundwater level (cm) and $z_{n+1}$ is  the position of the first saturated node (cm) (z-axis is defined positive upward, z=0 at the surface). The foregoing means that the bottom of the unsaturated flow domain is determined by a Dirichlet condition. Further, the flow equation is solved for the unsaturated nodes (node 1 up to n). The error resulting from the assumption of zero gradient becomes negligible compared to the accuracy of the groundwater level data. Once the new pressure head profile and corresponding fluxes for the unsaturated zone have been calculated, the fluxes in the saturated compartments are calculated by assuming mass conservation for each saturated compartment. Finally, the (positive) pressure heads in the saturated zone are calculated by applying Darcy's equation, starting from node n+1.\\
+
+\textbf{Option 2 : A groundwater table is present and the flux through the bottom compartment of the soil profile is given }
+In this case the user specifies the flux through the bottom of the soil profile for each day of the simulation period. This flux at the bottom of the soil profile is kept constant throughout a simulation day. The flow situation at the bottom of the soil profile is characterised by a Neuman boundary condition and the flow equation can be solved for all compartments in which the soil profile has been discretized. The new position of the water table is calculated from the pressure head profile at the end of each time step.\\
+
+\textbf{Option 3: A groundwater table is present and a flux-ground water level relationship is available}
+For the sandy soils in the eastern part of the Netherlands, the following relationship between the groundwater level and the discharge Qb has been derived:
+\begin{equation}
+Q_b = a \cdot e^{b \phi}
+\end{equation}
+where f is the groundwater level (m) and a, b are regression coefficients. Examples of such measurements are given by Ernst and Feddes, (1979). Also for this case the flow situation at the bottom of the soil profile is determined by a Neuman condition.\\
+
+\textbf{Option 4: The pressure head at the bottom of the soil profile is given}
+In this case the pressure head is known for a nodal point outside the considered flow domain at the lower boundary of the soil profile (Dirichlet condition).\\
+
+\textbf{Option 5: Free drainage condition is assumed at the bottom of the soil profile}
+When free drainage occurs, the flux through the bottom of the soil profile is always negative (=downwards) and equal to the hydraulic conductivity of the bottom compartment:
+
+\begin{equation}
+Q_{n+1/2} = - K_n
+\end{equation}
+
+According to this assumption the pressure head at the bottom of the soil profile is constant with depth and the flow of water is only controlled by gravity. This assumption is valid for conditions of a deep water table. Furthermore, the profile depth has to be chosen such that infiltration profiles never reach the bottom. Once again a Neuman condition exists at the bottom of the soil profile. To estimate the first approximate solution of the water flow equation, the bottom flux yields:
+
+\begin{equation}
+Q_{n+1/2}^{j+1} = - K_n^j
+\end{equation}
+
+For the successive Newton-Raphson iterations, the following expression holds:
+
+\begin{equation}
+Q_{n+1/2}^{j+1}^{\tau + 1} = - K_n^j^\tau
+\end{equation}
+
+\textbf{Option 6: Zero flux through the bottom of the soil profile}
+This boundary condition needs no further comment because the situation at the bottom of the soil profile is a typical Neuman condition.\\
+
+\textbf{Option 7: Lysimeter bottom boundary condition}
+Lysimeters often have a drainage system or an outlet at the bottom, allowing free outflow when saturation occurs at the bottom. None of the foregoing conditions apply to this special case. When a small positive pressure is build up at the bottom, water will flow out. In this case the pressure head of the bottom node ($h_{n+1/2}$) is fixed to zero (Dirichlet), as if we had a water table at the bottom. The situation is however different from a water table, because upward flow can never occur in a free draining lysimeter. Therefore, every time step it is checked wether the flux through the bottom is still negative (downward). If not, the boundary condition is specified as a zero flux condition (Neuman) instead and this condition is maintained as long as $h_{n+1/2}$ remains negative.\\
+
+\section{ Modelling of the water transport in cropped soils}
+
+\subsection{ Introduction}
+
+When modelling the water balance of cropped soils crop transpiration and interception are part of the water balance. In the WAVE-model the interception capacity of the crop is input in the model. The potential transpiration rate is calculated as a fraction of the maximum potential evapotranspiration. The latter is obtained by multiplying the potential evapotranspiration of the reference crop or surface with a crop specific coefficient which varies as a function of the crop development stage (Doorenbos and Pruitt, 1977; Raes et al., 1986; Feddes, 1987). The fraction of the potential evapotranspiration allocated to the transpiration is calculated according to the leaf area index. Finally, the potential transpiration is reduced to an actual lavel, based on moisture conditions in the root zone.
+
+There are two possibilities to specify crop development in the WAVE-model: (i) the leaf area and root development are specified as model input or (ii) leaf area and root growth are calculated using a crop growth model. Taking the first approach, only the water uptake mechanism in the root zone is dynamically represented in the model. Other processes are not explicitely considered in the simulated system. Hence the leaf area and rooting depth are needed as input variables to the model. Yet, when also simulating the crop development and growth, the crop system and the soil water system are completely integrated, offering a framework with many more possibilities for including feed back mechanisms of soil moisture and nutrient availability on crop development. Before describing in detail the integrated crop growth model, the canopy interception model, the transpiration model, and the macroscopic root water uptake model will be discussed at length. These models assume that the crop root length, LAI and potential evapotranspiration are simulated/measured as a function of time.
+
+\subsection {Crop interception}
+Interception can be quite considerable in crops like corn or forests. Yet, detailed data on the interception capacity as a function of development stage, for a range of crops and climate conditions are lacking. The interception capacity of water by the crop is not modelled in the WAVE-model, but specified as input. At a specified time step, the storage of water in the canopy, is calculated as the minimum of the sum of the potential precipitation and irrigation during that day and the specified potential interception capacity reduced with that water that is still stored from the previous time step. In calculating the actual transpiration (see later), the amount stored in the canopy is assumed to evaporate first. Hence, this amount is subtracted from the potential transpiration calculated with Eq. 62 (see infra). 
+
+\subsection{ Calculation of the potential evapotranspiration of a crop}
+
+The potential evapotranspiration of a disease free crop (ETcrop), grown under optimal soil water and fertility conditions is calculated in the WAVE-model by multiplying the potential evapotranspiration of a reference surface (ET0) with a crop coefficient Kc. This procedure actually originates from irrigation science and is rather empirical. Since the rainfall surplus is one of the main driving mechanisms of transport in the soil, it is extremely important to try to correctly estimate the ETcrop. In this context, it should be noted that the Kc-factors used are the ones derived for a given calculation procedure of the potential evapotranspiration for a specific reference surface. The Kc-value varies throughout the growing season and its value depend on the crop development stage and the climatic conditions.
+
+When the Penman equation is used to calculate potential evapotranspiration with grass as a reference surface, the Kc-factors of Doorenbos and Pruitt (1977) can be used to estimate ETcrop. In the approach of Doorenbos and Pruitt, the growing season is subdivided into 4 stages: the initial, the crop development, the mid-season and the late season stage (see Fig. 10). For bare soil conditions, or if the crop ground cover is less than 10 perc, evapotranspiration is mainly controlled by the moisture content in the top soil. The soil evaporation decreases as the soil dries. This effect is accounted for in the approach of Doorenbos and Pruitt by assuming a small value for Kc. Since the reduction of the evaporation is accounted for when solving the water flow equation, a Kc-factor of 1 should be used during the crop initial stages (from germination until the ground cover index is equal to 10 perc). During mid-season (from effective full ground cover until start of maturing) and at maturity Kc-values as reported in Tables 2 and 3 are recommended to calculate the potential crop evapotranspiration, if grass is the reference surface. The value of the Kc-factor for the crop development phase (end of initial stage until attainment of effective full ground cover) is obtained by linear interpolation between the Kc-factor of the initial stage (which is mostly equal to 1.0) and the Kc-factor of the crop mid-season stage. The Kc-factor of the late-season stage (end of mid-season, until attainment of crop maturity) is obtained by linear interpolation between the mid-season and maturity Kc-value. The assumed Kc-development is given in Fig. 10.\\
+
+Table 2: Kc-factors during the mid-season stage for different crop and different prevailing climatic conditions according Doorenbos and Pruitt (1977). The value of the Kc-factor is related to ET0 with grass as a reference surface\\
+% Table generated by Excel2LaTeX from sheet 'table2'
+\begin{tabular}{|r|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+     Crop  & RH>70\%  Windspeed = 0-5 m s-1  &    $RH>70\%$ &   $RH<20\%$ &    $RH<20\%$ \\
+\hline
+Artichokes  &       0.95 &       0.95 &          1 &       1.05 \\
+\hline
+   Barley  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+Beans (green)  &       0.95 &       0.95 &          1 &       1.05 \\
+\hline
+Beans (dry), Pulses  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+    Beets  &          1 &          1 &       1.05 &        1.1 \\
+\hline
+  Carrots  &          1 &       1.05 &        1.1 &       1.15 \\
+\hline
+Castor beans  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+   Celery  &          1 &       1.05 &        1.1 &       1.15 \\
+\hline
+Corn (sweet)  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+Corn (grain)  &       1.05 &       1.15 &       1.15 &        1.2 \\
+\hline
+Crucifers  &       0.95 &          1 &       1.05 &        1.1 \\
+\hline
+ Cucumber  &        0.9 &        0.9 &       0.95 &          1 \\
+\hline
+Egg plant  &       0.95 &          1 &       1.05 &        1.1 \\
+\hline
+     Flax  &          1 &       1.05 &        1.1 &       1.15 \\
+\hline
+    Grain  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+   Lentil  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+  Lettuce  &       0.95 &       0.95 &          1 &       1.05 \\
+\hline
+   Melons  &       0.95 &       0.95 &          1 &       1.05 \\
+\hline
+   Millet  &          1 &       1.05 &        1.1 &       1.15 \\
+\hline
+     Oats  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+Onion (dry)  &       0.95 &       0.95 &       1.05 &        1.1 \\
+\hline
+Onion (green)  &       0.95 &       0.95 &          1 &       1.05 \\
+\hline
+  Peanuts  &       0.95 &          1 &       1.05 &        1.1 \\
+\hline
+     Peas  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+  Peppers  &       0.95 &          1 &       1.05 &        1.1 \\
+\hline
+   Potato  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+ Radishes  &        0.8 &        0.8 &       0.85 &        0.9 \\
+\hline
+Safflower  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+  Sorghum  &          1 &       1.05 &        1.1 &       1.15 \\
+\hline
+ Soybeans  &          1 &       1.05 &        1.1 &       1.15 \\
+\hline
+  Spinach  &       0.95 &       0.95 &          1 &       1.05 \\
+\hline
+   Squash  &        0.9 &        0.9 &       0.95 &          1 \\
+\hline
+Sugar beet  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+Sunflower  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+   Tomato  &       1.05 &        1.1 &        1.2 &       1.25 \\
+\hline
+    Wheat  &       1.05 &        1.1 &       1.15 &        1.2 \\
+\hline
+\end{tabular}  
+
+
+
+Table 3: Kc-factors at the end of the late-season stage for different crop and different prevailing climatic conditions according Doorenbos and Pruitt (1977). The values of the Kc-factor is related to ET0 with grass as a reference surface\\
+
+
+Fig. 10: Time course of the crop Kc-factor as standard used in the WAVE-model\\
+
+As an alternative to the Doorenbos and Pruitt approach, one can also use tabular Kc-values. The tables 4 and 5 list monthly Kc-values for a few crops under Dutch conditions. Table 4 gives crop factors to be used in combination with open water evaporation (reference surface = water).\\
+
+Table 4: Crop factors as related to the Penman open water evaporation equation, for different crops and different decades during the crop season (source: Feddes (1987))\\
+
+The aerodynamic term in the Penman formula is badly defined. Therefore, more simple but empirical approaches are often used (Makkink, 1957; Priestly and Taylor, 1972). When using the Makkink formula for calculating ET0 of a grass reference surface, the Kc-factors as reported in Table 5 should be used.\\
+
+Table 5: Crop factors as related to the Makkink reference crop evapotranspiration for grass, for different crops and different decades during the crop season (source: Feddes (1987))\\
+
+\subsection{ Estimation of the potential transpiration and evaporation}
+
+The potential transpiration and evaporation are obtained by splitting the potential crop evapotranspiration, using the LAI as division parameter:
+\begin{eqnarray}
+E_p &=& f \cdot e^{-c \cdot LAI}\cdot ET_{crop}\\
+\nonumber
+T_p &=& ET_{crop} - E_p - \frac{CanStor}{1 day}
+\end{eqnarray}
+
+
+where $E_p$ is the potential soil evaporation (mm day-1); $T_p$ is the potential crop transpiration (mm day-1); $ET_{crop}$ is the potential evapotranspiration (mm day-1); CanStor, the amount of water which has been intercepted and is now released from the crop canopy (mm), and f, c are crop specific parameters (-). In the WAVE-model, the f is set fixed to 1 and c equal to 0.6. Eq. (62) implies that, if interception has occured during the previous day, this water is allowed to evaporate fully during the current day. Furthermore, transpiration only starts after all intercepted water has been evaporated. The sum of soil evaporation , evaporated interception water and transpiration can of course not exceed the ETcrop.
+
+\section{Description of the root water uptake}
+
+Water uptake by roots is the result of a complex process which is controlled by soil, plant and atmospheric conditions. To simplify the description of the root water uptake, Feddes et al. (1978) introduced the maximal root water uptake rate as a function of depth Smax(z) (day-1). In the WAVE-model the relation Smax(z) with depth is input. Note that this relation summarizes the influence of both crop and soil on root water uptake. A compilation of literature data for the Smax(z) functions, for cereals and grass, is given by Diels (1994), and is depicted in the Figs. 11 and 12.
+\\
+Fig. 11: Maximum root extraction rates for cereals as a function of depth. The symbols represent literature data from field experiments with wheat (ÿ from Ehlers (1976); + from Gregory et al.(1978); <> from Strebel(1978)) and barley (x from Maulé and Chanasyk (1986); D from McGowan et al.(1980)). The solid lines represent extreme curves and a reference curve halfway between both extreme curves
+\\
+Fig 12: Maximum root extraction rate for grass as a function of depth. The symbols represent literature data from laboratory experiments (ÿ from Belmans (1979); <> tropical grass data from Badji (1984)) and a field experiment (+ from Flühler et al.(1975)). The solid lines represent extreme curves and a reference curve halfway between both extreme curves
+\\
+As can be observed from the Figs.11 and 12, an exponential or linear function could be adopted to describe Smax(z). In the WAVE-model, the linear function is available :
+
+\begin{equation}
+S_{max}(z) = A- Bz
+\end{equation}
+
+where A (day-1), and B (day-1 mm-1) are model input parameters. Alternatively one can input Smax-values for each soil compartment separately.
+\\
+Water uptake is strongly reduced at high pressure head values, near saturation, due to anaerobiosis, and at low pressure heads, due to moisture stress. This phenomenon is described in the WAVE-model by specifying the dimensionless reduction function a(h), which reduces the maximum extraction rate according:
+
+\begin{equation}
+S(z,h) = \alpha(h) S_{max}(z)
+\end{equation}
+
+The $\alpha(h)$ in the WAVE-model is characterized by the pressure head values h0, h1, h2, and h3 (cm) (Fig.13). When the pressure head in the soil exceeds h0 (near saturation), water uptake ceases due to lack of oxygen in the root system. Between, h1 and h2, water uptake is optimal (a=1). Below h3, water uptake stops due to drought stress. The a(h)-function between h2 and h3 can be selected to be linear or hyperbolic. The parameters h2 and h3 are less sensitive if drainage calculations are of concern (Diels, 1994). The wilting point value (h3= -16000 cm, pF = 4.2) is often taken as a lower limit for the a(h) curve, while h2 often is set equal to -500 cm. The values of h0 and h1, reflecting anaerobiosis, should be selected with caution. Bakker et al. (1987) presented O2-diffusion coefficients of different soils at different air contents. Minimal air contents necessary for a minimal oxygen diffusion ranged between 0.03-0.10 m3 m-3. This corresponds to pressure head values ranging between 20 and 200 cm. The h0, and h1 values should be selected in these ranges.\\
+
+Fig. 13: General shape of the dimensionless sink term variable a expressed in terms of pressure head (left) and pF (right). Both a linear (top) and hyperbolic (bottom) decrease of a(h) below the threshold pressure head h2 are depicted. Curve 1 and 2 are the curves for low and high atmospheric demand, respectively. h0: threshold pressure head (cm) above which uptake ceases due to anaerobiosis; h1: threshold pressure head below which water uptake is not reduced; h2l : threshold pressure head below which water uptake decreases (linearly or hyperbolically) for low atmospheric demand; h2h : threshold pressure head below which water uptake decrease (linearly or hyperbolically) for high atmospheric demand; h3: threshold pressure head below which water uptake ceases due to wilting\\
+
+The $\alpha(h)$-factor which expresses the effect of pressure head on the root water uptake, is insufficient to describe actual root water uptake. It is still necessary to specify at which depths water will be extracted. Several experiments have shown that water is preferentially extracted near the soil surface. Only when moisture stress occurs is water extracted at larger depths. In the root extraction model of Hoogland et al. (1980) a similar process is mimicked by integrating the root water uptake term from the soil surface to an increasing depth z less or equal to the rooting depth Lr, until the integral becomes equal to the potential transpiration rate. If the integration over the complete rooting depth is insufficient to explain the potential transpiration rate, water stress is considered to occur and the actual transpiration rate is set equal to the integral of S(h,z) over the rooting depth. This concept is written as:
+
+\begin{equation}
+T_a = \int_0^{z<L_r} S(h,z)dz <= T_p
+\end{equation}
+
+
+where Ta is the actual transpiration rate (mm day-1); Tp is the potential transpiration rate (mm day-1); and Lr is the rooting depth (mm). Finally, the root water uptake in each soil compartment is accounted for in the soil water flow equation by adding Eq.(64) to the right hand side of the flow equation.\\
+
+Effects of root senescence or severe moisture stress on root water uptake, is simulated in the WAVE-model by specifying an inactivity zone near the surface where the root water uptake is set equal to zero. The date when the roots start to show inactivity and a date when maximum inactivity is reached, is input. In between these dates, the inactivity zone expands linearly with depth, from 0 until a specified depth.\\
+
+\section{References}
+
+Badji, M., 1984. Utilisation de l'eau du sol par une culture (Brachiaria Ruziziensis) en conditions climatiques semi-arides. Analyse expérimentale et simulation numérique. Ph.D. Dissertation, Fac. Agric. Sciences, K.U.Leuven, 157 pp.
+
+Bakker, J.W., F.R. Boone and P. Boekel, 1987. Diffusie van gassen in de grond en zuurtstof diffusiecoëfficiënten in Nederlands akkerbouwgronden. Report 20, ICW, Wageningen, The Netherlands, 44 pp.
+
+Belmans, C., 1979. Waterstroming in het systeem bodem-plant-atmosfeer: benadering door middel van simulatie. Ph.D. Dissertation, Fac. Agric. Sciences, K.U.Leuven.
+
+Brooks, R.H. and A.T. Corey, 1964. Hydraulic properties of porous media. Hydrology paper 3, Colorado State University, Fort Collins, Colorado. 27 pp.
+
+Carnahan, B., H.A.Luther and J.O. Wilkes, 1969. Applied numerical methods. John Wiley and Sons, 604 pp.
+
+Childs, E.C. , 1969. The physical basis of soil water phenomena. Wiley Intersciences, New York.
+
+Diels, J., 1994. A validation procedure accounting for model input uncertainty: methodology and application to the SWATRER model. Ph.D. Dissertation, Fac. Agric. and Appl. Biol. Sciences, K.U.Leuven, 173 pp.
+
+Doorenbos, J. and W.O. Pruitt, 1977. Crop water requirements. FAO, Irrigation and drainage paper 24, Rome, Italy.
+
+Durner, W.,1994. Hydraulic conductivity estimation for soils with heterogeneous pore structure. Water Res. Res., 30(2): 211-223.
+
+Ehlers, W., 1976. Evapotranspiration and drainage in tilled and untilled loess soil with winter wheat and sugar beet. Z. Acker- und Pflanzenbau, 142:285-303.
+
+Ernst, L.F and R.A. Feddes, 1979. Invloed van grondwateronttrekking van beregening en drainwater op de grondwaterstand. Inst. Land and Water Manag. Res. (I.C.W.), Simulation Monographs, PUDOC, Wageningen, The Netherlands, 189 pp.
+
+Feddes, R.A, 1987. Crop factors in relation to Makkink reference crop evapotranspiration. In: J.C. Hooghart (ed.) 'Evaporation and weather'. TNO, Comittee on Hydrological Research, nr. 39, The Netherlands.
+
+Feddes, R.A., P.J. Kowalik and H. Zaradny, 1978. Simulation of field water use and crop yield. Simulation Monographs, PUDOC, Wageningen, The Netherlands. 189 pp.
+
+Flühler, H., F. Richard, K. Thalman and F. Borer, 1975. Einfluss der Saugspannung auf den Wasserentzug die Wurzeln einer Grasvegetation. Z. Pflanzenern. Bodenk., 6:583-593.
+
+Gardner, W., 1958. Some steady state solutions of the unsaturated moisture flow equation with application to evaporation from a water table. Soil Sci., 85:228-232.
+
+Gerke, H.H and M.Th. van Genuchten, 1993. A dual-porosity model for simulating the preferential movement of water and solutes in structured porous media. Water Res. Res., 29:305-319.
+
+Gilham, R.W., A. Klute and D.F. Herrmann, 1976. Hydraulic properties of a porous medium. Measurements and empirical representations. Soil Sci. Soc. of Am. J., 40:203-207.
+
+Gregory, P.J., M. McGowan and P.V. Biscoe, 1978. Water relations of winter wheat. 2. Soil water relations. J. Agric. Sci. Camb., 91:103-116.
+
+Haines, W.B., 1930. Studies in the physical properties of soils. The hysteresis effect in capillary properties and the modes of moisture distribution associated therewith. J. Agr. Sci., 20:97-116.
+
+Haverkamp, R., M. Vauclin, J. Touma, P.J. Wierenga and G. Vachaud, 1977. A comparison of numerical simulation models for one-dimensional infiltration. Soil Sci. Soc. of Am. Proc., 41:285-294.
+
+Hoogland, J.C., C. Belmans and R.A. Feddes, 1980. Root water uptake model depending on soil water pressure head and maximum extraction rate. Acta Hortic., 119:123-136.
+
+Huwe, B. and R.Van der Ploeg, 1988. Modelle zur Simulation des Stickstoffhaushaltes von Standorten mit Unterschiedlicher Landwirtschaftlicher Nutzung. Eigenverlag des Instituts fur Wasserbau der Universitat Stuttgart, Heft 69, 213 pp.
+
+Jones, M.J.and K.K. Watson, 1987. Effect of soil water hysteresis on solute movement during intermittent leaching. Water Res. Res., 23(7):1251-1256.
+
+Jury,W.A., W.R. Gardner and W.H. Gardner, 1991. Soil Physics. Fifth Edition, John Wiley and Sons, Inc., 328 pp.
+
+Kool, J.B. and J.C. Parker, 1987. Development and evaluation of closed-form expressions for hysteretic soil hydraulic properties. Water Res. Res., 23(1):105-114.
+
+Makkink, G.F, 1957. Testing the Penman formula by means of lysimeters. J. Int. of Water Eng., 11:277-288.
+
+Maulé, C.P., and D.S. Chanasyk, 1987. A comparison of two methods for determining the evapotranspiration and drainage components of the soil water balance. Can. J. Soil Sci., 67: 43-54.
+
+McGowan, M. and J.B. Williams, 1980. The water balance of an agricultural catchment. 1. Estimation of evaporation from soil water records. J. of Soil Sci., 31:218-230.
+
+Mualem, Y. , 1974. A conceptual model of hysteresis. Water Res. Res., 10(3):514-520.
+
+Mualem, Y., 1976. A new model for predicting the hydraulic conductivity of unsaturated porous media. Water Res. Res., 12(3):513-522.
+
+Mualem, Y., 1977. Extension of the similarity hypothesis used for modeling the soil water characteristics. Water Res. Res., 13(4):773-780.
+
+Néel, L. , 1942-1943. Théories des lois d'aimantation de Lord Raileigh. Cah. Phys., 12- 13 :19-30.
+
+Philip, J., 1957. The theory of infiltration: The infiltration equation and its solution. Soil Science, 83:345-357.
+
+Priestly, C.H.B. and R.J.Taylor, 1972. On the assessment of the surfaces of heat flux and evaporation using large scale parameters. Month. Weth. Rev., 100:81-92.
+
+Raes, D., P. van Aelst and G. Wyseure, 1986. Etref, etcrop, etsplit and deficit. Reference manual, Soil and Water Engng. Lab., K.U.Leuven, Belgium. 109 pp.
+
+Remson, I., G.M. Hornberger and F.J. Molz, 1978. Numerical methods in subsurface hydrology. Wiley Interscience, New York. 389 pp.
+
+Richards, 1931. Capillary conduction of liquid through porous medium. Physics, 1:318-333.
+
+Russo, D., W.A. Jury and G.L. Butters, 1989. Numerical analysis of solute transport during transient irrigation. 1. The effect of hysteresis and profile heterogeneity. Water Res. Res., 25(10):2109-2118.
+
+Scott, P.S, G.J. Farquhor and N. Kouwen, 1983. Hysteretic effects on net infiltration. Adv. in Infiltration, 11-883, ASAE St.-Joseph, Michigan, 163-170.
+
+Tietje, O. and M. Tapkenhinrichs, 1993. Evaluation of pedo-transfer functions. Soil Sci. Soc. of Am. J., 57:1088-1095.
+
+van Genuchten, M.Th, 1980. A closed-form equation for predicting the hydraulic conductivity of soil. Soil Sci.Soc. of Am. J., 44:892-898.
+
+van Genuchten, M.Th, 1991. The RETC-code for quantifying the hydraulic functions of unsaturated soils. EPA/600/2-91/065, 83 pp.
+
+van Genuchten, M.Th. and D.R. Nielsen, 1985. On describing and predicting the hydraulic properties of unsaturated soils. Annales Geophysicae, 3(5):615-628.
+
+Vauclin, M., R. Haverkamp and G. Vachaud, 1979. Résolution numérique d'une équation de diffusion non-linéaire. Application à l'infiltration de l'eau dans les sols non-saturés. Presses Universitaires de Grenoble, Grenoble, 183 pp.
+
+Vereecken, H., J. Diels, J. van Orshoven, J. Bouma and J. Feyen, 1992. Functional evaluation of pedo-transfer functions for the estimation of soil hydraulic properties. Soil Sci. Soc. of Am. J., 56:1371-1378.
+
+Vereecken, H., J. Maes and J. Feyen, 1990. Estimating unsaturated hydraulic conductivity from easily measured soil properties. Soil Sc., 149(1):1-12.
+
+Vereecken, H., J. Maes, J. Feyen, and P. Darius, 1989. Estimating the soil moisture retention characteristic from texture, bulk density and carbon content. Soil Sc., 148(6):389-403.
+
+Viaene, P., 1994
+
+Wind, G.P., 1955. Field experiment concerning capillary rise of moisture in heavy clay. Neth. J. of Agr. Sci., 3:60-69.

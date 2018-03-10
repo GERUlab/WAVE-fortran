@@ -1,0 +1,378 @@
+\chapter {The solute transport module}
+\section{ Introduction}
+
+The water transport in soils imposes a convective motion on solutes. Local variations in water flow velocity, induces dispersion of the solute plume during transport. Chemical diffusion, induced by concentration gradients, causes a similar effect. Chemical and physical interactions between solute and soil matrix can retard the overall solute transport. The transfer of solutes is further dispersed by plant uptake and biological transformations. Those processes in turn are strongly controlled by soil temperature and moisture. As a consequence, the transfer of solutes in the soil system is a highly variable and unsteady process.\\
+
+Before discussing the processes controlling the transfer of solutes in soils, it is relevant to define what is meant by a solute in this context. A solution is a mixture of water and constituents of various chemical composition, which are partially or completely soluble in the soil water phase (De Marsily, 1986). Components in the water phase are normally ionized in proportion to the ionic charge of the element. However, dissolved substances can also be present in an electrically neutral chemical form or aggregated with other molecules and/or ions to form complex substances. Furthermore, it has been observed that salts, considered to be insoluble, can move in a dissolved state as tracers. In the same way, constituents in the form of large molecular aggregates such as colloids, might be present in the soil and move with the liquid phase. All the substances which, in one way or another form part of the soil fluidum, are known as soil solutes as long as they are not part of a mobile phase distinct from the transporting fluid. For many chemical substances on the other hand, a complete mixture with the soil water system does not exist. As such, the transport of many organics is closely related to multiphase flow. In this case processes like volatility, immiscibility and hydrofobicity may complicate the description of the fate of the chemical compound.\\
+
+The transport of a decaying and sorbing solute in field soils is described numerically with the solute transport module of the WAVE-model. The included solute transport equation is defined in a macroscopic way, indicating that the state variables (e.g. solute concentration) and material characteristics (e.g. soil transport volume) are defined as averages over a Representative Elementary Volume (REV) (Bear, 1972). The developed solute transport model is referred to as the two component or two region convection dispersion model. The model assumes the existence of immobile or stagnant soil water regions, situated at the intra-aggregate or dead end pores and mobile soil water regions. When considering two regions, no complete mixing of the solute in the soil water phase is assumed but rather a solute exchange, which is diffusion limited, controls solute exchange between both soil regions. Transport in the two component medium is described with a couple of equations. For the mobile soil region the convection-dispersion equation holds. In both regions adsorption is assumed to occur reversibly and linearly.
+\\
+Although the theoretical framework for describing the solute transport phenomena at field scale is still in development, a deterministic point model like the two component model which is developed at the laboratory scale, can be used with variable success to describe solute transport under field conditions.
+
+\section{The soil solute transport equation}
+
+Figure 14 illustrates the conceptualisation of the soil system when developing the solute transport equation. Distinction is made between the soil volume occupied by air, the mobile soil water region, the immobile soil water region, the static soil complex defined as the soil complex with adsorption sites in contact with the immobile soil region and the dynamic soil complex with sorption sites in contact with the mobile soil region.
+\\
+Fig. 14: Conceptualisation of the soil system (after van Genuchten and Wierenga, 1976)
+\\
+First the solute transport in the mobile soil region is discussed. Transport of solute in the mobile soil region is determined by chemical diffusion, convection and hydrodynamic dispersion. The term diffusion refers to the movement of solute as a result of Brownian motion. The thermal energy causes the particles to move randomly in the phase that contains them. Given a mass of solute in a stagnant water reservoir, then the diffusion flux in water qdl (kg m-2 day-1) can be defined as the (macroscopic) solute mass going through a unit area across the water reservoir per unit of time. Fick's first law can be used to relate solute flux and concentration gradient:
+\\
+\begin{equation}
+q_{dl} = - Dif \cdot \frac{\partial C_m}{\partial x}
+\end{equation}
+
+where C is the soil solute concentration (kg m-3); x is the space co-ordinate (m); and Dif is the chemical diffusion coefficient of the considered solute in pure water (m2 day-1). When solute moves by diffusion in the water phase of the soil, the cross sectional area available for diffusion is only a fraction of the total cross sectional area. Due to the tortuous nature of the pores, the diffusion process results in a slower macroscopic vertical spreading than in a pure water system. For this reason an effective diffusion coefficient, De (<Dif) (m2 day-1), which depends on the mobile soil water content, qm (m3 m-3), is used to describe diffusive solute transport in the mobile soil region:
+
+\begin{equation}
+q_{ds} = - De \cdot \theta_m \cdot \frac{\partial C_m}{\partial x}
+\end{equation}
+
+where qds is the diffusional solute flux in the soil mobile region (kg m-2 day-1).
+\\
+The value of De can be estimated by the equation of Kemper and Van Schaik (1966):
+
+\begin{equation}
+D_e = \frac{Dif \cdot a \cdot e^{b\cdot \theta_m}}{\theta_m}
+\end{equation}
+where a and b are empirical constants reported to be approximately b = 10 and 0.005<a< 0.01 (Olsen and Kemper, 1968). The chemical diffusion coefficient in pure water, Dif, and the parameters a and b are model input.
+\\
+The term convection refers to the phenomenon where dissolved substances are carried along by the movement of water. Solutes that are carried by the moving water are said to undergo convective, viscous, or mass flow. As such, mass flow is perfectly related to the law determining the transport of water and which was described in a previous chapter of this reference manual. Hence, the convective solute flux going through a unit area equals:
+
+
+\begin{equation}
+q_{cw} = C_m \cdot \theta_m \cdot V_m = C_m \cdot q_w
+\end{equation}
+where qcw is the convective solute flux density (kg m-2 day-1) imposed by the convective water flow; qw is the Darcian water flux (m3 m-2 day-1); Vm is the average macroscopic pore water velocity (m day-1); and Cm is the solute concentration in the mobile soil region (kg m-3). Owing to the porous nature of the soil, the microscopic pore velocity in the mobile soil region is not equal to macroscopic pore water velocity. The microscopic pore velocity is distributed around the average macroscopic value, in a manner that depends on the pore size and shape. Flow in larger pores is faster than in the small ones and is much faster at the center of a pore than near the periphery. In this way the complexity of the pore system causes mixing of the soil solution along the flow direction, and hence dispersion of the solute. This phenomenon, often referred to as mechanical dispersion is induced by randomly distributed pore velocities and results in a net flow of solute proportional to the velocity. On the basis of the assumption of randomness, one can describe mechanical dispersion in a similar way as chemical diffusion using Fick's law with the diffusion coefficient De or Dif replaced by a mechanical dispersion coefficient, denoted Dm (m2 day-1). The latter is assumed to be proportional to the effective average macroscopic pore water velocity:
+
+
+\begin{equation}
+D_m = \lambda \cdot V_m
+\end{equation}
+
+where l (m) is the soil solute dispersivity.
+\\
+The total macroscopic convective transport of a solute in the mobile soil region is described commonly with an equation that takes into account two modes or components of transport: (i) the average flow velocity component (given by Eq. (69)) and (ii) the mechanical dispersion component (Fick's law with Dm). Adding the two components together yields the total convective flux equation, qct (kg m-2 day-1):
+
+\begin{equation}
+q_{ct} = \theta_m \cdot C_m \cdot V_m + \theta_m \cdot \lambda \cdot V_m \cdot \frac{\partial C_m}{\partial x}
+\end{equation}
+
+By adding the diffusive flux (Eq.(67)) to the convective flux (Eq.(71)), a relation is obtained for the total solute flux travelling along the mobile soil region, qtm (kg m-2 day-1):
+
+\begin{equation}
+q_{tm} = q_{ds} + q_{ct} = - \theta_m \cdot (D_e + D_m) \frac{\partial C_m}{\partial x} + V_m\cdot \theta_m \cdot C_m
+\end{equation}
+
+At high flow velocities, or when considerable heterogeneity occurs, the dispersion term is much larger than the diffusion term and Eq.(72) simplifies to:
+
+\begin{equation}
+q_{tm} =  - \theta_m \cdot D_m^* \frac{\partial C_m}{\partial x} + V_m\cdot \theta_m \cdot C_m
+\end{equation}
+
+where Dm* is the apparent diffusion coefficient in the mobile soil region (m2 day-1). Table 6 reports on literature values for pore water velocities, apparent dispersion coefficients, dispersivities, and mobile water contents for undisturbed partially saturated soil.
+\\
+Table 6: Literature review of solute transport parameters. Values between brackets represent possible ranges (Beven et al., 1993)
+\\
+
+When a solute is adsorbed, then the total solute mass in a unit soil volume equals the sum of the mass dissolved in the soil solution phase and the mass adsorbed on the soil complex. Both are related according to the equation:
+\begin{equation}
+C_m = f \cdot \rho \cdot C_{sm} + \theta_m \cdot C_m
+\end{equation}
+
+where Ctm is the total solute mass in the mobile region (kg solute m-3 dry soil); Csm is the adsorbed solute mass on the soil complex (kg kg-1 dry soil); r is the soil bulk density (kg m-3); and f is the fraction of the adsorption sites situated in contact with the mobile soil region (-). For linear and reversible adsorbing species, the distribution constant is used to relate solute in the soil solution and on the sorption sites or:
+
+\begin{equation}
+C_sm = k_d \cdot C_m
+\end{equation}
+where kd is the solute distribution constant (m3 kg-1). Hence Eq. (74) simplifies to:
+
+\begin{equation}
+C_tm = C_m \cdot (\theta_m + f \cdot \rho \cdot k_d)
+\end{equation}
+
+
+The parameters f, kd and r are model input. Reasonable simulations can be obtained if all sorption sites are assumed to be situated in the mobile soil region (f = 1). The distribution constants kd can be derived from batch sorption experiments or the analysis of breakthrough curve data. The latter method should be preferred, since it enables to identify retardation parameters on undisturbed, scale independent, soil samples. For pesticides, the koc approach is often used. If this is the case, the kd value is obtained by multiplying koc with the fraction of organic carbon. Literature data of different koc and kd values are extensively reviewed by Montgomery et al., 1993.
+\\
+So far, no interaction between the mobile and the immobile soil region was considered. If however diffusion between both soil regions occur, then this diffusion solute flux, qfl (kg m-3 day-1) is proportional to the solute concentration difference:
+
+\begin{equation}
+q_{fl} = \alpha^* \cdot (C_m - C_{im})
+\end{equation}
+
+where a* is an empirical transfer coefficient (day-1); and Cim is the solute concentration in the immobile soil region (kg m-3solution).
+\\
+The continuity equation for the solute in the soil mobile region, for an infinitesimal small volume of soil is written as:
+
+\begin{equation}
+\frac{C_{tm}}{\partial t} = \frac{q_{tm}}{\partial x} + q_{fl}
+\end{equation}
+
+In combination with Eqs. (73,76,77), Eq. (78) reduces to the solute transport equation for the mobile soil region:
+\\
+Similarly, mass conservation in the immobile soil region yields:
+\begin{eqnarray}
+\frac{\partial (\theta_m C_m)}{\partial t} + \frac{\partial (f \cdot \rho \cdot k_d \cdot C_m)}{\partial t}  &=& 
+\frac{\partial}{\partial x} \left(\theta_m \cdot D_m^* \frac{\partial C_m}{\partial x}\right) - \frac{\partial (q_w \cdot c_m)}{\partial x} + \alpha^*(c_m - C_{im}\\
+\frac{\partial (\theta_{im} \cdot C_{im})}{\partial t} + (1-f)\cdot \rho \cdot k_d \frac{\partial C_{im}}{\partial t} &= &- \alpha^*(C_m - C_{im})
+\end{eqnarray}
+When no immobile water is present, then Eq.(79) simplifies to the classical convection dispersion equation (Warrick et al., 1971; Bresler, 1972).
+
+\section{Numerical solution of the solute transport equation}
+
+\subsection {The solution Procedure}
+
+In order to solve Eqs. (79) and (80) by finite difference technique, the same time and space discretisation as for the water flow equation is adopted. The following parameters and state variables are initialised for each soil compartment: the soil moisture content (q); the soil pore water velocity (Vm); the soil bulk density (r); the chemical diffusion parameters (Dif, a, b); the hydrodynamic dispersivity (l); the ratio mobile versus total moisture content (qm/q); the transfer coefficient between the mobile and the immobile soil region (a*); the mass distribution coefficient (kd) and the fraction of the sorption sites in the mobile or immobile soil region (f).\\
+
+The solute transport equations (Eqs.(79) and (80)) are expanded in finite difference formulations. To ensure convergence and to minimise numerical dispersion, a Crank Nicolson numerical scheme is used to solve the transport equation in the mobile soil region. Second order terms are included in the discretisation scheme. Full details of the discretization scheme are given in Tillotson et al. (1980). Expanding the first term of Eq. (79) yields:
+
+\begin{equation}
+\begin{split}
+\left(\frac{\theta_{m_i}^{j+1}C_{m_i}^{j+1} - \theta_{m_i}^{j}C_{m_i}^{j}}{\Delta t}\right) - \left(\frac{\Delta t V_{m_i}^{j+1/2}(\theta_{m_i}^{j+1} - \theta_{m_i}^{j})}{16\Delta x^2}\right)\\ 
+&\cdot V_{m_{i-1/2}^{j+1/2}(C_{m_{i-1}}^{j+1} + C_{m_{i-1}}^{j} - C_{m_{i}}^{j+1} - C_{m_{i}}^{j}
+- V_{m_{i+1/2}^{j+1/2}(C_{m_{i}}^{j+1} + C_{m_{i}}^{j} - C_{m_{i+1}}^{j+1} - C_{m_{i+1}}^{j}
+\end{split}
+\end{equation}
+
+where i denotes the space index from the i-th compartment; and j the time index. The second term of Eq.(79), the adsorption term, is discretised as follows:
+
+\begin{equation}
+f_i\cdot \rho_i\cdot kd_i \left(\frac{C_{m_i}^{j+1} - C_{m_i}^{j}}{\Delta t}\right)
+\end{equation}
+
+The term containing the apparent diffusion coefficient is developed according to:
+
+\begin{equation}
+\frac{D_m_{i-1/2}^{j+1/2} \cdit \theta_m_{i-1/2}^{j+1/2}}{2 \cdot \Delta z^2} \cdot (C_m_{i-1}^{j+1} + C_m_{i-1}^{j} - C_m_{i}^{j+1} - C_m_{i}^{j}) 
+- \frac{D_m_{i+1/2}^{j+1/2} \cdit \theta_m_{i+1/2}^{j+1/2}}{2 \cdot \Delta z^2} \cdot (C_m_{i}^{j+1} + C_m_{i}^{j} - C_m_{i+1}^{j+1} - C_m_{i+1}^{j}) 
+\end{equation}
+
+while expansion of the convection term results in:
+
+\begin{equation}
+\begin{split}
+-\beta_1 \frac{q_w_{i-1/2}^{j+1/2}}{2 \Delta x} (C_m_{i+1}^{j} + C_m_{i-1}^{j+1}) 
++ \beta_2 \frac{q_w_{i+1/2}^{j+1/2}}{2 \Delta x} (C_m_{i}^{j} + C_m_{i}^{j+1})\\
+- \beta_3 \frac{q_w_{i+1/2}^{j+1/2}}{2 \Delta x} (C_m_{i+1}^{j} + C_m_{i-1}^{j+1})
++ \beta_4 \frac{q_w_{i-1/2}^{j+1/2}}{2 \Delta x} (C_m_{i}^{j} + C_m_{i}^{j+1})
+\end{split}
+\end{equation}
+
+If the flux in the i-th compartment is negative, then $\beta_1=1$ and $\beta_4=0$. If, however, this flux is positive, then $\beta_1=0$ and $\beta_4=1$. A positive flux in the i+1-th compartment results in $\beta_3=1$ and $\beta_2=0$; while the opposite results in $\beta_3=0$ and $\beta_2=1$. Defining the following variables:\\
+
+\begin{eqnarray}
+AB_i &=& \frac{D_m_{i-1/2}^{j+1/2} \cdot \theta_m_{i-1/2}^{j+1/2}}{2\Delta x^2} + \frac{\Delta t \cdot V_m_{i}^{j+1/2} \cdot V_m_{i-1/2}^{j+1/2} (\theta_m_i^{j+1} - \theta_m_i^{j})}{16\Delta x^2}\\
+\nonumber
+BB_i &=& \frac{D_m_{i+1/2}^{j+1/2} \cdot \theta_m_{i-1/2}^{j+1/2}}{2\Delta x^2} + \frac{\Delta t \cdot V_m_{i}^{j+1/2} \cdot V_m_{i+1/2}^{j+1/2} (\theta_m_i^{j+1} - \theta_m_i^{j})}{16\Delta x^2}\\
+\nonumber
+CB_i &=& \frac{q_w_{i-1/2}^{j+1/2}}{2\Delta x}\\
+DB_i &=& \frac{q_w_{i+1/2}^{j+1/2}}{2\Delta x}
+\end{eqnarray}
+
+and substituting, yields the finite difference analogue of Eq.(79):
+\begin{equation}
+\begin{split}
+\frac{\theta_m_i^{j+1}C_m_i^{j+1} - \theta_m_i^{j}C_m_i^{j}}{\Delta t} - AB_i (C_m_{i-1}^{j+1} + C_m_{i-1}^{j} - C_m_{i}^{j+1} - C_m_{i}^{j})\\
++ BB_i ( C_m_{i}^{j+1} + C_m_{i}^{j}-C_m_{i+1}^{j+1}-C_m_{i+1}^{j}) + f_i \cdot \rho_i\cdot k_d_i \left(\frac{C_m_{i}^{j+1} - C_m_{i}^{j}}{\Delta t}\right)\\
+ =  - \beta_1 \cdot CB_i (C_m_{i-1}^{j} + C_m_{i-1}^{j+1}) + 
+ \beta_2 \cdot DB_i (C_m_{i}^{j} + C_m_{i}^{j+1})\\
+ + \beta_3 \cdot DB_i (C_m_{i+1}^{j} + C_m_{i+1}^{j+1})
+ - \beta_4 \cdot CB_i (C_m_{i}^{j} + C_m_{i}^{j+1})
+ - \alpha^*(C_m_i^j - C_{im}_i^j)
+ \end{split}
+\end{equation}
+
+
+Rearranging the terms in Eq.(86) yields the following equation:
+
+\begin{equation}
+AL_i \cdot C_m_{i-1}^{j+1} +BL_i \cdot C_m_{i}^{j+1} + CL_i \cdot C_m_{i+1}^{j+1} = DL_i
+\end{equation}
+where:
+\begin{eqnarray}
+AL_i &=&-AB_i + \beta_1\cdot CB_i\\
+\nonumber
+BL_i &=& \frac{\theta_m_i^{j+1}}{\Delta t} + AB_i + BB_i + \frac{f_i\cdot \rho_i k_d_i}{\Delta t} - \beta_2 \cdot DB_i + \beta_4\cdot CD_i\\
+\nonumber
+CL_i &=& -BB_i - \beta_3\cdot DB_i\\
+\nonumber
+%\begin{split}
+DL_i &=& C_m_{i-1}^{j}(AB_i - \beta_1\cdot CB_i)
++ C_m_i^j\left(\frac{\theta_m_i^{j+1}}{\Delta t} - AB_i - BB_i + \frac{f_i\cdot \rho_i k_d_i}{\Delta t}+\beta_1\cdot DB_i - \beta_4\cdot CB_i\right)\\
++ C_m_{i+1}^j(BB_i + \beta3 \cdot DB_i) + \alpha^*(C_m_i^j - C_m_i^j)
+%\end{split}
+\end{eqnarray}
+
+
+Equation (87) is easily derived for each node except for the top and bottom node. Two similar equations are derived when expanding the top and bottom boundary transport equation. For the top node, the following expression holds:
+
+\begin{equation}
+BL_1 \cdot C_m_{1}^{j+1} + CL_1 \cdot C_m_{2}^{j+1} = DL_1
+\end{equation}
+
+while for the bottom node the equation yields:
+
+\begin{equation}
+AL_n \cdot C_m_{n-1}^{j+1} +BL_n \cdot C_m_{n}^{j+1} = DL_n
+\end{equation}
+
+So, for n equations with n unknowns, it is possible to obtain the concentration for each node on the j+1-th time step. The unknown vector is found by solving Eqs. (87, 89, 90) simultaneously using the Thomas algorithm (Remson et al., 1978). Writing Eqs. (87, 89, 90) in matrix format yields:
+\begin{equation}
+\begin{pmatrix}
+BL_1 & CL_1 & & & & \\
+AL_2 &BL_2 &CL_2& & & \\
+ & AL_3 &BL_3 & Cl_3 & & \\
+ & & & & & \\
+ & & &AL_{n-1}& BL_{n-1} & CL_{n-1}\\
+ & & & & AL_n & BL_n\\
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+C_m_1^{j+1} \\ C_m_2^{j+1} \\ C_m_3^{j+1} \\ \\ C_m_{n-1}^{j+1} \\C_m_n^{j+1} \\
+\end{pmatrix}
+= 
+\begin{pmatrix}
+DL_1 \\ DL_2 \\ DL_3 \\ \\ DL_{n-1} \\DL_n\\
+\end{pmatrix}
+
+\end{equation}
+The coefficient matrix is tri-diagonal. Hence, the unknown vector ($C_m_1^{j+1}$, $C_m_2^{j+1}$, \ldots , $C_m_n^{j+1}$) can be obtained, using the Thomas algorithm.\\
+
+In addition to the solution of the transport equation in the mobile soil region, the mass balance equation in the immobile soil region Eq.(80) is solved explicitly. Defining g as:
+
+\begin{equation}
+g = \theta_{im} + (1-f) \cdot \rho \cdot k_d
+\end{equation}
+
+and substituting, reduces Eq.(80) to:
+\begin{equation}
+\frac{\partial (g \cdot C_{im})}{\partial t}  = - \alpha^* (C_m  - C_{im})
+\end{equation}
+
+Expanding the left-hand side of Eq.(93) in a Taylor series and ignoring the higher order terms yields:
+
+\begin{equation}
+\frac{\partial (g \cdot C_{im})}{\partial t}  = \frac{g \cdot C_{im}_i^{j+1} - g \cdot C_{im}_i^{j}}{\Delta t} - \frac{\Delta t \cdot \partial^2(g\cdot C_{im})}{2 \cdot \partial t^2}
+\end{equation}
+
+
+The expansion of the second order term in Eq.(94) yields:
+\begin{equation}
+\frac{\partial (g \cdot C_{im})}{\partial t}  = \frac{\partial}{\partial t} (-\alpha^*(C_m-C_{im})) = \frac{-\alpha^* \cdot C_m_i^{j+1} + \alpha^* \cdot C_m_i^{j}  }{\Delta t} + \frac{\alpha^* \cdot C_{im}_i^{j+1} - \alpha^* \cdot C_{im}_i^{j}  }{\Delta t}
+\end{equation}
+
+
+Substituting Eq. (95) into (94) and (93) and rearranging, the mass balance equation for the immobile soil region becomes:
+
+\begin{equation}
+AG_i \cdot C_{im}_i^{j+1} = BG_i\cdot C_{im}_i^j + \frac{\alpha^* \cdot C_m_i^{j+1}}{2}  + \frac{\alpha^* \cdot C_m_i^{j}}{2}
+\end{equation}
+
+where:
+
+\begin{eqnarray}
+AG_i &=& \frac{\theta_{im}_i^{j+1}}{\Delta t} + \frac{(1-f_i)\cdot \rho_i \cdot k_d_i}{\Delta t} + \frac{\alpha_i^*}{2}\\
+\nonumber
+BG_i &=& \frac{\theta_{im}_i^{j}}{\Delta t} + \frac{(1-f_i)\cdot \rho_i \cdot k_d_i}{\Delta t} + \frac{\alpha_i^*}{2}
+\end{eqnarray}
+
+	
+
+Notwithstanding the use of an implicit numerical scheme and keeping second order terms in the finite difference analogue, numerical dispersion influences model calculations. Numerical dispersion increases when the compartment size increases. To quantify the impact of numerical dispersion, the development of a solute plume was calculated with the numerical model, given a pulse type top boundary condition and a steady-state water flow condition. Solute resident concentrations predicted by the model were used to fit an analytical solution of the transport equations through it. The solution proposed by van Genuchten and Alves (1982) was used. The optimised apparent diffusion coefficient was compared with the model input dispersivity times the simulated pore water velocity. This comparison yielded a linear relationship, with a slope close to one and intercept equal to 0.13 times the compartment size. This intercept is a measure of the induced numerical dispersion. A standard correction on the apparent dispersion constant in the WAVE-model has been made according to these results.
+
+\subsection{Definition of the Upper boundary condition}
+
+To solve the solute transport equation, an additional numerical equation, similar to Eq.(86), needs to be defined for the top node. A flux type boundary condition is used to define the top boundary in the WAVE-model.
+
+\begin{eqnarray}
+infilration : q_w < 0  : J_s &=& C_f \cdot q_w \\
+\nonumber
+evaporation : q_w > 0 : J_s &=& 0
+\end{eqnarray}
+
+where $C_f$ equals the solute flux concentration (kg m-3) and $J_s$ the solute mass flux (kg m-2 s-1). To define $C_f$, an artificial solute mass reservoir is assumed to exist outside the soil profile. When solute is applied (with a fertilisation or irrigation event), it dissolves in the mass of water entering the profile during the day of solute application (or the first day when infiltration occurs). Hence, the solute mass flux $J_s$ is determined by the water flow across the soil surface, filling or depleting the hypothetical reservoir. During infiltration, solute mass enters only the mobile soil region. Assuming zero dispersion in the hypothetical reservoir, the solute concentration at the soil surface is set equal to $C_f = J_s/q_w = C_s$. In case of evaporation, the solute concentration at the soil surface equals zero ($C_f = C_s = 0$). Taking into account above considerations, the finite difference equation for the soil mobile region at the top becomes:
+
+\begin{equation}
+\begin{split}
+C_m_1^{j+1}\left(\frac{\theta_m_1^{j+1}}{\Delta t} + AB_1 + BB_1 + \frac{f_1\cdot \rho_1 \cdot k_d_1}{\Delta t} - \beta_2\cdot DB_1 + \beta_4 \cdot CB_1 \right)\\
++ C_m_2^{j+1}(-BB_1 - \beta_3 \cdot DB_1) = \\
+C_s^j(AB_1 - \beta_1 \cdot CB_1) - C_s^{j+1}(AB_1 + \beta_1 \cdot CB_1)\\
+C_m_1^{j}\left(\frac{\theta_m_1^{j+1}}{\Delta t} - AB_1 - BB_1 + \frac{f_1\cdot \rho_1 \cdot k_d_1}{\Delta t} + \beta_2\cdot DB_1 - \beta_4 \cdot CB_1 \right)\\
++ C_m_2^{j}(BB_1 + \beta_3 \cdot DB_1)
+\end{split}
+\end{equation}
+
+with
+\begin{eqnarray}
+AB_1 &=& \frac{\Delta t \cdot V_m_1^{j+1/2} \cdot q_w_{1-1/2}^{j+1/2} \cdot(\theta_m_1^{j+1} - \theta_m_1^{j})}{16 \Delta x^2}\\ 
+\nonumber
+BB_1 &=& \frac{\Delta t \cdot V_m_1^{j}\cdot V_m_{1+1/2}^{j+1/2} \cdot (\theta_m_1^{j+1} - \theta_m_1^{j})}{16 \Delta x^2} \\
+\nonumber
+CB_1 &=& \frac{q_w_{1-1/2}^{j+1/2}}{2\Delta x}\\
+\nonumber
+DB_1 &=& \frac{q_w_{1+1/2}^{j+1/2}}{2\Delta x}
+\end{eqnarray}
+	
+
+and which can be rearranged to:
+\begin{equation}
+BL_1 \cdot C_m_1^{j+1} + CL_1 \cdot C_m_2^{j+1} = DL_1
+\end{equation}
+
+\subsection{Definition of the lower boundary condition}
+
+In the WAVE-model, a zero concentration gradient at the bottom of the flow domain is considered:
+
+\begin{equation}
+\frac{\partial C_m}{\partial x} \vline_{x=L} = 0
+\end{equation}
+In discretised form, the bottom boundary condition definition is defined as:
+
+\begin{equation}
+C_{m_{n+1}}^{j+1} = C_{m_{n}}^{j+1}
+\end{equation}
+
+Using Eq.(103) the finite difference scheme for the lower boundary node becomes:
+\begin{equation}
+\begin{split}
+C_m_n^{j+1}\left(\frac{\theta_m_n^{j+1}}{\Delta t} + AB_n + BB_n + \frac{f_n\cdot \rho_n \cdot k_d_n}{\Delta t} - \beta_2\cdot DB_n + \beta_4 \cdot CB_n \right)\\
++ C_m_{n-1}^{j+1}(-AB_n - \beta_2 \cdot CB_n) = \\
+C_m_n^{j}\left(\frac{\theta_m_n^{j+1}}{\Delta t} - AB_n - BB_n + \frac{f_n\cdot \rho_n \cdot k_d_n}{\Delta t} + (\beta_2 + \beta_3) \cdot DB_n - \beta_4 \cdot CB_n \right)\\
++ C_m_{n-1}^{j}(AB_n - \beta_1\cdot CB_n)
+\end{split}
+\end{equation}
+
+with
+\begin{eqnarray}
+AB_n &=& \frac{D_m_{n-1/2}^{j+1/2}\cdot \theta_m_{n-1/2}^{j+1/2}}{2 \Delta x^2} + \frac{\Delta t \cdot V_m_n^{j+1/2}\cdot V_m_{n-1/2}^{j+1/2} \cdot  \cdot(\theta_m_n^{j+1} - \theta_m_n^{j})}{16 \Delta x^2}\\ 
+\nonumber
+BB_n &=& \frac{\Delta t \cdot V_m_n^{j+1/2}\cdot V_m_{n+1/2}^{j+1/2} \cdot (\theta_m_n^{j+1} - \theta_m_n^{j})}{16 \Delta x^2} \\
+\nonumber
+CB_n &=& \frac{q_w_{n-1/2}^{j+1/2}}{2\Delta x}\\
+\nonumber
+DB_n &=& \frac{q_w_{n+1/2}^{j+1/2}}{2\Delta x}
+\end{eqnarray}
+
+\section{References}
+
+Bear, J. 1972. Dynamics of fluids in porous media. Elsevier, New York, London, Amsterdam, 764 pp.
+
+Beven, K.J., D.Ed. Henderson and Alison D. Reeves, 1993. Dispersion parameters for undisturbed partially saturated soil. J. of Hydrol., 143:19-43.
+
+Bresler, E., 1973. Simultaneous transport of solute and water under transient flow conditions.Water Res. Res., 9(4): 975-986.
+
+De Marsily, G., 1986. Quantitative hydrogeology. Groundwater hydrology for engineers. Academic Press Inc., 440 pp.
+
+Kemper, W.D. and J.C. Van Schaik, 1966. Diffusion of salts in clay water systems. Soil Sci. Soc. of Am. Proc., 30:534-540.
+
+Montgomery et al., 1993.
+
+Olsen, S.R. and W.D. Kemper, 1968. Movement of nutrients to plant roots. Advances in Agronomy, 20:91-151.
+
+Remson, I., G.M. Hornberger and F.J. Molz, 1978. Numerical methods in subsurface hydrology. Wiley Interscience, New York, 389 pp.
+
+van Genuchten, M.Th. and W.J. Alves, 1982. Analytical solutions of the convection dispersion solute transport equation. U.S.Dept. of Agronomy, Tech. Bull. 1661, 151 pp.
+
+Warrick, A.W., J.W. Biggar and D.R. Nielsen, 1971. Simultaneous solute and water transport for an unsaturated soil. Water Res. Res., 7:1216-1225.
+
+[go to previous paragraph] 	[paragraph] 	[end of chapter]
+[go to index]

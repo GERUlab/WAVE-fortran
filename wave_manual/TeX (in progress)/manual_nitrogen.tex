@@ -1,0 +1,275 @@
+\chapter{ The nitrogen fate module}
+\section{ Introduction}
+
+The fate of nitrogen in the soil is determined by different processes (Fig.16). Nitrogen can enter the soil environment through atmospheric deposition (rainfall and dry deposition), fertilizer application, organic matter addition or through nitrogen fixation by rhizobia. Nitrogen can leave the soil environment through nitrogen denitrification, volatilization, plant uptake or leaching. Mineralisation from organic into mineral nitrogen, immobilisation from mineral nitrogen in organic matter, nitrification from ammonia to nitrate and denitrification change the form, and so, the properties of nitrogen in the soil. Each of these processes has been the subject of intensive studies. Simulation models have been used for the description of the different subprocesses (Van Veen, 1977; Rachhpal-Singh and Nye, 1988; Verbruggen, 1985; De Willigen and Noordwijk, 1987, amongst others). However, to be of use for policy makers and to be able to solve a number of problems, an integrated model of the nitrogen cycle is required.\\
+
+Fig.16 : Schematic flow chart of the nitrogen cycle.\\
+
+Different levels of complexity exist for describing the nitrogen transfer and transformation processes. The complexity level of a selected model will strongly depend on the desired level of explanation. A simple, first order decay model for the mineralisation of the organic nitrogen might give a good description of the mineralisation processes shortly after an organic matter addition. However such a model might fail to describe the long term mineralisation process involving the decomposition of the organic matter fractions. A detailed model description, on the other hand reduces the model applicability for extrapolative purposes. Parameters describing the transformation processes of nitrogen for a wide set of soil and management scenarios are still lacking at this moment.\\
+
+The nitrogen module used in the WAVE-model, was originally developed by Vereecken et al. (1990, 1991) and named SWATNIT (Simulating WATer and NITrogen). The nitrogen module describes the transformation processes for the organic and inorganic nitrogen in the soil. Also, the uptake of nitrogen by the plants is described by means of a sink term added to the transport equation. The potential transformation rates, which are model input, are reduced for temperature and moisture content in the soil profile. The model compremises research findings with field results. For the processes which are believed to be better understood and for which relevant data are available a more complex approach is used. Other processes, such as soil denitrification or volatilization, are described using simple kinetics.\\
+
+\section{ Modelling of nitrogen transformations in soils}
+
+
+\subsection {Mineralisation of the soil organic nitrogen}
+
+Organic nitrogen transformations and resulting mineralization of organic carbon and nitrogen are described using a three pool concept as reported by Johnsson et al. (1987) and shown in Fig.17. These authors distinguish a fast cycling pool of organic matter/microbial bio-mass complex (soil litter pool), receiving fresh organic matter and a slow cycling pool of stabilized decomposed products (soil humus pool). Because of the different properties of the applied slurry or manure, a third pool (soil manure pool) is distinguished. The soil biomass, which constitutes 1 to 5 \% of the soil organic matter, though being the eye of the needle where all the organic material at least once passes through (Jenkinson and Ladd, 1981; Dendooven, 1990), is not modelled explicitely. However, it is assumed that the nitrogen demand for the internal cycling of carbon and nitrogen in the three pools, which is modelled explicitely, is regulated by a constant C/N ratio of the soil biomass, which is model input. In addition, it is assumed that the C/N ratio of the turn-over metabolites equals the C/N ratio of the soil bio-mass. Consequently, this C/N ratio controls the soil mineral nitrogen release from the three organic matter pools.\\
+
+Fig.17: Organic matter turnover concept as applied in the nitrogen fate module (Johnsson et al., 1987)\\
+
+The turnover of the carbon in the litter pool is represented by the upper loop in Fig. 17. The fraction of C in te litter pool which is turned over per unit time equals klit.Clit. The turn-over efficiency fe (-) determines which fraction is effectively transformed into new organic matter through the biomass and which fraction is decomposed. The humification constant fh determines next which fraction of the effectively turned-over C goes to the humus pool. Hence, the net increase of C in the litter pool is written as:
+
+\begin{equation}
+\frac{\partial C_{lit}}{\partial t} = IN - OUT = \left((1-f_h)f_e-1\right)k_{lit}C_{lit}
+\end{equation}
+
+where $C_{lit}$ is the carbon content of the litter pool (kg C m-3 soil); $f_h$ is the dimensionless humification constant (-); $f_e$ is the dimensionless turn-over efficiency (-); $k_{lit}$ is the decomposition rate of the litter (day-1).\\
+
+During the turn-over of the litter-C, N-immobilization or N-mineralization can occur, depending on the C/N ratio's of the litter ($C_{lit}/N_{lit}$) and the biomass ($\rho$). From Eq. () it follows that the net increase of the N-content in the litter pool is written as:
+
+\begin{equation}
+\frac{\partial N_{lit}}{\partial t} = \left((1-f_h)f_e \frac{1}{\rho}-\frac{N_{lit}}{C_{lit}}\right)k_{lit}C_{lit}
+\end{equation}
+
+where $N_{lit}$ is the N-content of the litter pool (kg N m-3 soil) and $\rho$ is the biomass C/N ratio. In Eq. (154) it is assumed that the turn-over metabolites have the same C/N ratio as the biomass ($\rho$).\\
+
+For the manure pool, a similar tun-over loop is represented in the Fig. 17. Equation similar to Eqs. (153) and (154) can be written as follows:
+
+\begin{eqnarray}
+\frac{\partial C_{man}}{\partial t} &=& \left((1-f_h)f_e-1)\right)k_{man}C_{man}\\
+\frac{\partial N_{man}}{\partial t} &=& \left((1-f_h)f_e\frac{1}{\rho}-\frac{N_{man}}{C_{man}})\right)k_{man}C_{man}
+\end{eqnarray}
+
+
+where $C_{man}$ and $N_{man}$ are respectively the C content (kg C m-3 soil) and N-content (kg N m-3 soil) in the manure pool; and $k_{man}$ is the decomposition rate of the manure pool (day-1). It is assumed that the same $f_e$ and $f_h$ constants apply for the litter and manure pools. From Fig.17 it can be seen that the net increase rate of C an N in the humus pool is written as:
+
+\begin{eqnarray}
+\frac{\partial C_{hum}}{\partial t} &=& f_e f_h (k_{lit}C_{it} + k_{man}C_{man}) - k_{hum}C_{hum}\\
+\nonumber
+\frac{\partial N_{hum}}{\partial t} &=& \frac{f_e f_h}{\rho} (k_{lit}C_{it} + k_{man}C_{man}) - k_{hum}N_{hum}\\
+
+where $C_{hum}$ and $N_{hum}$ are respectively the C content (kg C m-3 soil) and N content (kg N m-3 soil) in the humus pool; and $k_{hum}$ is the decomposition rate of the humus pool (day-1). All C/N turn-over reactions represented in Fig. 17 can result in a net production or consumption of ammonium, depending on the C/N ratio's of the biomass and the three pools. As the increase of NH4+-N, due to mineralisation is equal to the decrease of organic N in the three organic matter pools, we obtain from the Eqs. (154), (156) and (157):
+
+\begin{equation}
+\frac{\partial N_{NH_4^+}}{\partial t} = \left(\frac{N_{lit}}{C_{lit}} - \frac{f_e}{\rho}\right)k_{lit}C_{lit} + 
+\left(\frac{N_{man}}{C_{man}} - \frac{f_e}{\rho}\right)k_{man}C_{man} + 
+k_{hum}N_{hum}
+\end{equation}
+Eq.(158) determines whether mineralisation (right hand side of the equation is positive) or immobilsation (right hand side is negative) is occuring. In case no ammonium is available for immobilsation, nitrate is used as given by the following equation:
+
+\begin{equation}
+\frac{\partial N_{NO_3^-}}{\partial t} = - \frac{f_e}{\rho}(k_{lit}C_{lit} - k_{man}C_{man})
+\end{equation} 
+
+Equations (153) to (159) are integrated numerically using the Euler integration method. The resulting mineralisation/immobilisation rates enter the sink term of the solute transport equation.\\
+
+In order to account for soil water and temperature effects on the organic matter turn-over, the potential rate constants, klit, kman and khum are reduced. It is assumed that between a low (pF=3) and high (pF=2) critical moisture content no reduction occurs. In non-optimal conditions a reduction factor is derived by linear interpolation between 1 and 0 in the moisture content interval ($\theta(pF=3)-\theta(oven dryness)$), and between 0 and 1 in the moisture content interval ($\theta(saturation)-\theta(pF=2$). The effect of soil temperature is considered through a default Q10 (Q10=3)reduction function.
+
+\begin{equation}
+REDTEMP = 3^{\frac{T-16}{10}}
+\end{equation}
+
+where T is the soil temperature (^\circ C).
+
+A compilation of literature data on the bio-mass C/N ratio ro, is listed in Table 32.
+
+Table 32: C/N ratio's of soil bio-mass as reported in literature (Dendooven, 1990).
+
+For solving the mineralisation equations the organic matter pools need to be initialised. The distribution of the organic matter in both the nitrogen and carbon fraction of the three pools is model input. Paul and Juma (1981) stated that 92 \% of the organic matter in the soil can be situated in the stable humic pool. This figure can be used to initialise the humus pool. The remaining soil organic matter can then be distributed equally over the litter and manure pool. In practice, a warm-up period of several years to equilibrate the nitrogen and carbon content in the different pools is recommended.\\
+
+The turn-over of the organic matter is further controlled by the carbon turn-over efficiency. The carbon turn-over efficiency equals the fraction of the mineralised carbon which turns over in the organic matter immediately and hence is not lost as carbon dioxide. This fraction governs the amount of immobilised or mineralised nitrogen through the given constant C/N ratio of bio-mass and metabolisation products. Carbon turn-over efficiency values range between 10 and 60\% dependending on the kind of substrate or decomposing micro-organisms. Compiled literature data (Dendooven, 1990) for this parameter are given in Table 33. A part of the soil organic carbon which turns over is incorporated in the humus pool of the soil. This fraction is controlled by the humification coefficient which can be set equal to e.g. 0.2 (Johnson et al., 1987). The carbon turn-over efficiency constant and humification coefficient are model input.\\
+
+Table 33: Efficiency constants of the carbon assimilation as reported in literature (Source: Dendooven, 1990)
+fe 	Description
+
+The mineralisation or immobilisation of soil organic matter from the different pools is governed by the potential decomposition rates. Literature values of possible decomposition rates, for the different organic matter fractions, are given in the Tables 34, 35, and 36.\\
+
+Table 34: Decomposition rate of soil litter as reported in literature (Source: Dendooven, 1990)\\
+
+Table 35: Decomposition rate of soil manure as reported in literature\\
+kman (day-1) 	Reference
+
+Table 36: Decomposition rate of soil humus as reported in literature\\
+khum (day-1) 	Reference
+
+\subsection{ Denitrification}
+
+Due to the anaerobic respiration of soil bacteria, soil nitrate-nitrogen is reduced to gaseous nitrogen forms such as N2O and N2. The soil pH, the texture, the organic carbon supply, the amount of crop residues, the soil temperature, the soil mineral nitrate availability, the soil aeraetion and moisture status, among others, are factors controlling the denitrification in field conditions. In the nitrogen module of WAVE, a first order kinetic approach is used to assess the soil denitrification. The anaerobic respiration is not linked to tun-over model for the organic matter.The following equations are used:
+
+\begin{equation}
+\frac{\partial [NO_3^-]}{\partial t} = k_{denit}[NO_3^-]
+\end{equation}
+
+where $NO_3^-$ is the nitrate concentration in the soil water and $k_{denit}$ is a first order denitrification constant (day-1).\\
+
+Few studies are available yielding potential denitrification rates for a range of soil types. Breeuwsma et al. (1991) report on potential soil denitrification rates, based on the soil texture, carbon content and mean groundwater level. The following relations are suggested for sandy and clay soils unther Dutch conditions:
+
+
+The potential denitrification rate is reduced using the Q10 temperature reduction function (Eq.(160)). The effect of the soil moisture status on denitrification is assessed through the use of the soil water reduction factor for denitrification, $R_w$ (Johnsson et al.1987; Aulakh et al., 1992):
+
+\begin{eqnarray}
+Sandy : k_{denit} &=& 0.41 \cdot Carbon(\%) - 0.35 \cdot mean groundwaterlevel (m) \\
+\nonumber
+Clay : k_{denit} &=& 0.61 - 0.51 \cdot Clay(\%) + 0.20 \cdot Carbon(\%)\\
+\nonumber
+S_e > 0.8 : R_w &=& \left(\frac{\theta - \theta_d}{\theta_s - \theta_d}\right)^d\\
+\nonumber
+S_e < 0.8 : R_w &=& 0
+\end{eqnarray}
+
+where $\theta_d$ is a critical threshold value, corresponding to a saturation degree of 0.80, and d an empirical constant, set equal to 2.
+
+\subsection{ Volatilisation}
+
+In the soil environment ammonia might be present in gaseous form. If conditions are favourable ($pH > 7.5$) and the partial pressure head gradient between $NH_3$ in the soil and the atmosphere is sufficiently large, ammonia gas can volatilise. Ammonia volatilisation in WAVE is simulated using a first order kinetic approach.
+
+
+\subsection{ Nitrification}
+
+Nitrification, which tranforms ammonia-N to nitrate-N and which is ruled by heterotrophic soil organisms, is modelled using a first order kinetic equation. Since soil nitrification is controlled by the soil bio-mass, the former defined temperature and water reduction (see section 6.2.1) mechanisms are applied.
+\subsection{ Hydrolysis of urea}
+
+The hydrolysis of urea, which is a basic constituent of many inorganic and organic fertilizers, is modelled using a first order kinetic approach. Again, temperature and water stress reduction mechanisms are considered (see section 6.2.1).
+
+\subsection{ Uptake of ammonia and nitrate}
+
+The nitrogen uptake by plants is described using a macroscopic uptake model as proposed by Mc Isaac et al. (1985) and adapted by Huwe and van der Ploeg (1988). The macroscopic uptake component restricts the nitrogen uptake rate to a potential level.
+
+If crop growth is not modelled, the potential uptake rate ($\partial N/ \partial t$)p is calculated as:
+
+\begin{eqnarray}
+t < G: \frac{\partial N}{\partial t}\vline_p &=& A \cdot t \cdot (G-t)\\
+\nonumber
+t >= G: \frac{\partial N}{\partial t}\vline_p &=& 0
+\end{eqnarray}
+
+where G the time when the plant N uptake stops (day), A a parameter to assure that in non-stressed conditions the maximum N uptake is reached (mg m-2 day-3). Integrating Eq. 166 yields $N=AGt^2/2-At^3/3$ which in optimal conditions (t=0, N=0; t=G, N=Nmax) enables to calculate A as $A=N_{max}/(G^3/2-G^3/3)$. The user has to specify a value for G and for the maximum N uptake (mg m-2). To simplify the input, G is input as a fraction of the total growing season. Hence, its value must range between 0 and 1.
+
+If crop growth is modelled the potential uptake rate is simulated as:
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_p = \frac{\partial N}{\partial t}\vline_{leaves} + \frac{\partial N}{\partial t}\vline_{stems} + \frac{\partial N}{\partial t}\vline_{roots}
+\end{equation}
+
+where the right hand terms of Eq.(167) refer to the nitrogen demand of the leaves, stems and roots, respectively. The potential uptake rates for leaves, stems and roots is modelled with:
+
+\begin{eqnarray}
+\frac{\partial N}{\partial t}\vline_{p, leaves} &=& WLV \cdot XNCLE - N_{leaves}\\
+\nonumber
+\frac{\partial N}{\partial t}\vline_{p, stems}&=& WST \cdot XNCST - N_{stems}\\
+\nonumber
+\frac{\partial N}{\partial t}\vline_{p, roots} &=& WRT \cdot XNCRT - N_{roots}
+\end{eqnarray}
+
+where WLV, WST, WRT is the accumulated dry matter (kg ha-1); XNCLE, XNCST, XNCRT the potential fraction of nitrogen N in the crop dry matter (kg N kg-1 DM); and Nstems, Nleaves and Nroots is the nitrogen N accumulated in the leaves, the stems and the storage organs. The fraction of the nitrogen N in the leaves, XNCLE, is input as a function of crop development stage. The fraction of nitrogen N in the stems and roots is assumed to be 50 \% of the fraction in the leaves.\\
+
+The potential nitrogen uptake rate is further divided in a convective and diffusive fraction. The potential convective nitrogen uptake rate (mg m-2 day-1) is defined as:
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{conv} = \int_0^{zmax} S_w \cdot C_m \cdot dx
+\end{equation}
+where zmax is the rooting depth at time t (mm), $C_m$ is the concentration of either nitrate or ammonia in the soil water (mg l-1), and $S_w$ is the convective root water uptake rate (day-1). The convective root water uptake is calculated in the water flow module of WAVE. The convective uptake rate is limited to the potential uptake rate. If the convective uptake rate is smaller then the potential, a potential diffusive nitrogen uptake rate is calculated:
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{difp} = \frac{\partial N}{\partial t}\vline_{p} - \frac{\partial N}{\partial t}\vline_{conv}
+\end{equation}
+
+The maximum diffusive nitrogen uptake rate, for both nitrate and ammonia, is calculated as:
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{difmax} = \int_0^{zmax} \frac{2\cdot \pi\cdot RDENSI \cdot RORAD \cdot Dif(\theta) \cdot C_{mi} \cdot \theta}{10^5 \cdot D0} dx
+\end{equation}
+
+
+where RDENSi is the root density (cm l-1); RORAD the mean root radius (mm); Dif($\theta$) is the chemical diffusion coefficient in a soil (mm2 day-1); 1/D0 the travel distance resistance between the bulk soil solution and the root (1/mm); $C_{mi}$ the concentration of either nitrate or ammonia in the soil solution (mg l-1) and dx the depth increment (mm). The maximum diffusive uptake rate is limited to the potential diffusive uptake rate. If the SUCROS-model is used, RDENSi is directly obtained from the crop growth module (1000* RLDFL (cm cm-3) = RDENSi (cm l-1)). If no crop growth model is used, the root density function is simulated with an exponential decreasing function :
+
+\begin{equation}
+RDENS = RDENS_0 \cdot e^{-alpha_rdens \cdot x}
+\end{equation}
+where $RDENS_0$ (cm l-1), the root density at the soil surface and $alfa_rdens$ (-) are model input. Both parameters can be derived from Table 31.
+
+The total actual uptake rate is calculated as the sum of the actual convective and the diffusive uptake rate or:
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{act} = \frac{\partial N}{\partial t}\vline_{conv} + \frac{\partial N}{\partial t}\vline_{dif}
+\end{equation}
+
+If crop growth is modelled, the actual uptake rate in the different crop components is modelled according to:
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{act}^{leaves} &=&
+ \frac{\partial N}{\partial t}\vline_{pot}^{leaves} \cdot 
+\left(\frac{\frac{\partial N}{\partial t}}{\frac{\partial N}{\partial t}}\right) - \frac{\partial N}{\partial t}\vline_{pot}^{storage organs} \cdot \left(\frac {WLV}{WLV + WST}\right)
+\end{equation}
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{act}^{stems} &=&
+ \frac{\partial N}{\partial t}\vline_{pot}^{stems} \cdot 
+\left(\frac{\frac{\partial N}{\partial t}}{\frac{\partial N}{\partial t}}\right) - \frac{\partial N}{\partial t}\vline_{pot}^{storage organs} \cdot \left(\frac {WST}{WLV + WST}\right)
+\end{equation}
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{act}^{roots} &=&
+ \frac{\partial N}{\partial t}\vline_{pot}^{roots} \cdot 
+\left(\frac{\frac{\partial N}{\partial t}}{\frac{\partial N}{\partial t}}\right)
+\end{equation}
+
+\begin{equation}
+\frac{\partial N}{\partial t}\vline_{act}^{storage, organs} &=&
+ \frac{\partial N}{\partial t}\vline_{pot}^{storage, organs} &=&
+ \left(WSO \cdot XBCSO - N_{storage, organs}\right) \cdot REDFACT
+\end{equation}
+%\end{eqnarray}
+
+The reduction factor is calculated using:
+
+\begin{eqnarray}
+REDFACT &=& 1- \sqrt{1-NITRED}\\
+\nonumber
+0<= NITRED &=& \left(\frac{ANCL - RLNCL}{RMNCL - RLNCL}\right) <=1
+\end{eqnarray}
+
+where ANCL is the actual nitrogen fraction in the leaves, RMNCL the leaf nitrogen threshold concentration for unrestricted growth assumed to be 0.5*XNCLE and RLNCL the leaf nitrogen threshold concentration below which there is no growth anymore, assumed to be equal to 0.005 kg N kg-1 D.M. The potential fraction of nitrogen N of the storage organs, XNCSO (kg N kg-1 D.M), is set default equal to 0.0125 kg N kg-1 D.M for winter and spring wheat, 0.025 kg N kg-1 D.M for potatoes and maize and 0.075 kg N kg-1 D.M for sugar beet. This uptake model of the different crop components is based on the PAPRAN model (Seligman and van Keulen, 1981).
+
+\section{References}
+
+Aulakh, M.S., J.W. Doran and A.R. Mosier, 1992. Soil denitrification significance, measurements and effects of management. Advances in Soil Science,18:2-42.
+
+Dendooven, L., 1990. Nitrogen mineralization and nitrogen cycling. Ph.D dissertation, Faculty of Agric. Sciences, K.U. Leuven, Belgium, 112 pp.
+
+De Willigen, P. and M. Van Noordwijk, 1987. Roots, plant production and nutrient use-efficiency. Ph.D. dissertation, Agricultural University Wageningen, The Netherlands, 282 pp.
+
+Gilmour, J.T. and G.M. Gilmour, 1980. A simulation model for sludge decomposition in soil. J. Environ. Quality, 9(2):194-199.
+
+Huwe, B. and R. Van der Ploeg, 1988. Modelle zur Simulation des Stickstoffhaushaltes von Standorten mit Unterschiedlicher landwirtschaftlicher Nutzung. Eigenverlag des Instituts fur Wasserbau der Universitat Stuttgart, Heft 69. 213 pp.
+
+Jenkinson, D.S and J.N. Ladd, 1981. Microbial biomass in soil. Measurement and turnover. In : E.A. Paul and J.N. Ladd (eds.). Soil Biochemistry. Dekker, N.Y: 415-471.
+
+Johnsson, H., L. Bergstrom, P. Jansson and K. Paustiaen, 1987. Simulating nitrogen dynamics and losses in a layered agricultural soil. Agric. Ecosystems and the Environ., 18:333-356.
+
+Nordmeyer, H. and J. Richter, 1985. Incubation experiments on nitrogen mineralization in loess and sandy soils. Plant and Soil, 83:433-445.
+
+Nuske, A. and J. Richter, 1981. N-mineralization in loss parabrown earthes: Incubation experiments. Plant and Soil, 59:237-247.
+
+McIsaac, D. Martin and D. Watts, 1985. Users guide to NITWAT-a nitrogen and water management model. Agr. Eng. Dept. University of Nebraska, Lincoln, Nebraska.
+
+Paul, E.A. and N.G. Juma, 1981. Mineralization and immobilization of soil nitrogen by micro-organisms. In: F.E. Clark and T. Rosswell (eds.) Ecol. Bull., 33:179-195.
+
+Rachhpal-Singh and P.H. Nye, 1988. A model of ammonia volatilization from applied urea. IV. Effect of method of urea application. Journal of Soil Science, 39:9-14.
+
+Richter, J. and H. Nordmeyer, 1982. Stickstoffmineralisation und Verfugbarkeit in Loss Ackerboden. 94 VDFLUFA Kongres, Munster, 121-129.
+
+Richter, J., A. Nuske, W. Habenicht and J. Bauer, 1982. Optimized N-mineralization parameters of loes soils from incubation experiments. Plant and Soil, 68:379-388.
+
+Seligman, N.G. and H. van Keulen, 1981. PAPRAN: A simulation model of annual pasture production limited by rainfall and nitrogen. In: M.J. Frissel and J.A. van Veen (eds.) Simulation of nitrogen behaviour of soil-plant systems. PUDOC, Wageningen, The Netherlands: 192-221.
+
+Verbruggen, J., 1985. Simulatie van het denitrificatie proces. Ph.D. dissertaion. Faculty of Agric. Sciences, K.U.Leuven, Belgium, 180 pp.
+
+Vereecken, H., M. Vanclooster and M. Swerts, 1990. A simulation model for the estimation of nitrogen leaching with regional applicability. In: R. Merckx and H. Vereecken (eds.). Fertilization and the environment. Leuven Academic Press, Belgium. 250-263.
+
+Vereecken, H., M. Vanclooster, M. Swerts and J. Diels, 1991. Simulating water and nitrogen behavior in soil cropped with winter wheat. Fert. Res. , 27: 233-243.
+
+Wadman, W.P. and P.A.I. Ehlert, 1989. Environmental effects of organic manures in sugar beet production. 52th winter congress IIRB, Brussels, 15-16 February 1989: 93-101.
+
+Van Veen, J. 1977. The behaviour of nitrogen in soil. Ph.D. dissertaion, Agric. University Wageningen, The Netherlands, 164 pp.
+
