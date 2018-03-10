@@ -1,0 +1,68 @@
+**********************************
+EXAMPLE 1: INFILTRATION EXPERIMENT
+**********************************
+
+In this example, we simulate an infiltration experiment for the following si-
+tuation:
+- Soil with 5 horizons (0-220 cm);
+- Water table at a constant depth of 2 meter;
+- Initially, the moisture content profile is in equilibrium with the ground wa-
+  ter table (hydraulic head is constant, no flow);
+- for a period of 10 days, the soil is irrigated with 10 mm/day.
+
+In the following, some notes explain how to do run WAVE for this example.
+
+STEP 1
+------
+For the WAVE program, the input files should always have the following stan-
+dard names:
+
+      GENDATA.IN      (general input data)
+      WATDATA.IN      (specific data for field water balance)
+      CLIMDATA.IN     (weather data)
+
+The three files for this example are already available on the directory a:\
+ex\ex1.
+
+STEP 2
+------
+Next run wave by typing '"path"\WAVE'+ enter  (do this in the same directory 
+as the one containing the input files), where "path" equals the path where the
+wave program is copied. 
+
+e.g. If the executable program a:\program\wave.exe was copied to c:\wave\pro-
+     gram\wave.exe, and your input data are in c:\wave\ex\ex1\, then redirect
+     to c:\wave\ex\ex1 and type "..\..\program\wave" (enter).
+
+If an error occurs, you will get error messages in the file ERR_FILE
+
+If everything is OK, you get 6 output files:
+  WAT_ET.OUT  : actual and potential evapotranspiration
+  WC.OUT      : water contents
+  WAT_CUM.OUT : cumulative values for terms of water balance
+  PH.OUT      : pressure heads
+  WAT_SUM.OUT : summary table of terms of water balance
+  FLX.OUT     : water fluxes
+
+The input is repeated in the *.RES files. Look at these *.RES files to verify
+if the input was correctly interpreted by the model.
+
+
+STEP 3
+------
+Take a brief look at the input files, and answer the following question:
+  How many nodes did we take to simulate this situation?
+
+STEP 4
+------
+Take a look at the output files, and answer the following questions:
+1.How many time steps were necessary for this 10 days experiment?
+  (hint: check end of file WAT_SUM.OUT)
+2.What is the simulated change in water storage for the whole profile, 
+  counted over the 10 days period? 
+  (hint: look at the water balance terms in file WAT_SUM.OUT)
+3.How much run-off did we get in this experiment?
+4.After how many days did we get steady state?
+  (hint: make a graph of the water contents versus time.  
+  Do this by taking the simulated water contents in file WC.OUT, 
+  and loading them in a spreadsheet.

@@ -1,0 +1,36 @@
+
+*************************************
+wat_cum.out:
+cumulative terms of the water balance
+*************************************
+
+
+ cprec         = cumulative precipitation (mm)
+ cruno         = cumulative runoff (mm)
+ cirr          = cumulative amount of applied irrigation water (mm)
+ cum_intc      = cumulative interception (mm)
+ ctra          = cumulative actual transpiration (mm)
+ csev          = cumulative actual evaporation (mm)
+ cflbp         = integrated positive (= upward) flux at the bottom of the soil profile (mm)
+ cflbn         = integrated negative (= downward) flux at the bottom of the soil profile (mm)
+ dif           = change of water storage in the entire profile (mm)
+ cberr_wat     = error on the balance (mm)
+
+ cflsdp        = integrated positive (= upward) flux at the bottom of the isd profile (mm)
+ cflsdn        = integrated negative (= downward) flux at the bottom of the isd profile (mm)
+ dif_isd       = change of water storage in the isd profile (mm)
+ cberr_wat_isd = error on the balance in the isd profile (mm)
+
+
+year month day  cprec  cruno  cirr  cum_intc ctra  csev  cflxbp  cflxbn voldif cberr_wat cflsdp cflsdn dif_isd cberr_wat_isd 
+                 (mm)   (mm)   (mm)   (mm)   (mm)  (mm)   (mm)   (mm)    (mm)    (mm)    (mm)    (mm)    (mm)    (mm)
+1990   1    1       10.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        10.2         0.2         0.0         0.0        10.2         0.2
+1990   1    2       20.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        20.3         0.3         0.0         0.0        20.3         0.3
+1990   1    3       30.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        30.5         0.5         0.0        -0.2        30.3         0.5
+1990   1    4       40.0        0.0        0.0        0.0        0.0        0.0        0.0        0.0        40.5         0.6         0.0        -0.9        39.7         0.6
+1990   1    5       50.0        0.0        0.0        0.0        0.0        0.0        0.0       -0.1        50.6         0.7         0.0        -3.3        47.7         1.0
+1990   1    6       60.0        0.0        0.0        0.0        0.0        0.0        0.0       -0.7        60.2         0.9         0.0       -10.5        51.5         2.0
+1990   1    7       70.0        0.0        0.0        0.0        0.0        0.0        0.0       -4.7        66.3         1.0         0.0       -20.2        52.0         2.2
+1990   1    8       80.0        0.0        0.0        0.0        0.0        0.0        0.0      -14.7        66.3         1.1         0.0       -30.2        52.1         2.3
+1990   1    9       90.0        0.0        0.0        0.0        0.0        0.0        0.0      -24.5        66.6         1.0         0.0       -40.4        52.1         2.5
+1990   1   10      100.0        0.0        0.0        0.0        0.0        0.0        0.0      -34.7        66.4         1.1         0.0       -50.1        52.0         2.1

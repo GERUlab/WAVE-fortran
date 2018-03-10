@@ -1,0 +1,23 @@
+C ********
+C CLIMDATA
+C ********
+
+C SPECIFY THE CLIMATOLOGICAL DATA
+C  IF NITROGEN IS MODELLED THEN SPECIFY MIN AND MAX TEMPERATURES
+C  IF SUCROS IS USED THEN SPECIFY MIN, MAX TEMPERATURES AND GLOBAL RADIATION
+C  ELSE SKIP LAST THREE COLUMNS
+
+C    YR M DAY    ET0     PREC   IRRIG  INTC  MINTEM MAXTEMP GLOBAL RAD
+C                (MM)    (MM)   (MM)   (MM)   (C)    (C)    (J/CM2/DAY)
+C ---------------------------------------------------------------------
+ 1990   1    1    0.0     10.    0.0    0.0
+ 1990   1    2    0.0     10.    0.0    0.0
+ 1990   1    3    0.0     10.    0.0    0.0
+ 1990   1    4    0.0     10.    0.0    0.0
+ 1990   1    5    0.0     10.    0.0    0.0
+ 1990   1    6    0.0     10.    0.0    0.0
+ 1990   1    7    0.0     10.    0.0    0.0
+ 1990   1    8    0.0     10.    0.0    0.0
+ 1990   1    9    0.0     10.    0.0    0.0
+ 1990   1   10    0.0     10.    0.0    0.0
+ET
