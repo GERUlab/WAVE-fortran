@@ -1,0 +1,32 @@
+**************************************************************
+EXAMPLE 3 : SIMULATION OF THE WATER BALANCE IN A CROPPED SOIL
+**************************************************************
+
+In this numerical experiment, the water balance of a cropped soil is going
+to be simulated, without using the universal crop growth model SUCROS.
+Therefore, the plant specific items in watdata.in need to be filled out.
+
+1) Edit the WATDATA.IN file and answer the following questions.
+   - How is the time course of the Kc-factor relating potential reference evap-
+     transpiration to potential crop evapotranspiration.
+   - When is the leaf area index maximal of the crop?
+   - What's the maximum rooting depth of the crop?
+   - What's the maximum root water extraction rate of the crop and at what
+     depth is it situated?
+
+2) Run WAVE by typing [path]wave (enter).
+
+3) Analyse in detail the output file WAT_SUM.OUT and answer the following ques-
+   tions:
+   - What's the integrated crop transpiration at the end of the simulation pe-
+     riod?
+   - Did any water stress occur during the growing season.
+4) Incorporate the WAT_ET.OUT in a spreadsheet programme and analyse in detail
+   the time course of the actual transpiration , potential transpiration, ac-
+   tual evaporation and potential evaporation rate.
+
+   
+
+
+
+    
