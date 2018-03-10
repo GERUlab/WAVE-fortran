@@ -1,0 +1,9 @@
+*********************************************************************
+EXAMPLE 6: SIMULATING THE WATER, SOLUTE, HEAT AND NITROGEN BALANCE IN
+           A SOIL CROPPED WITH MAIZE
+*********************************************************************
+
+In this example, all the modules currently available in WAVE are used.
+Investigated all the input files in detail, run wave and investigated the
+different output files.
+

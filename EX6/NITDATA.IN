@@ -1,0 +1,131 @@
+C********
+C NITDATA
+C********
+
+
+C NITROGEN UPPER BOUNDARY CONDITION
+C TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+ INPUT FROM EXTERNAL FILE NITUBC.NU?(Y/N): N
+
+C -DISTRIBUTION OF NITROGEN IN THE PLANT AT HARVEST
+C   FAG = ABOVE GROUND FRACTION (-)
+C   FLR = LIVING ROOTFRACTION   (-)
+C   FHP = HARVEST FRACTION      (-)
+     FAG............................................................: 0.04
+     FLR............................................................: 0.10
+     FHP............................................................: 0.86
+
+C -ORGANIC FERTILIZATION
+C   CARBORG = ORGANIC CARBON IN FERTILIZER   (MG M-2)
+C   NITORG  = ORGANIC NITROGEN IN FERTILIZER (MG M-2)
+
+   NUMBER OF APPLICATIONS OF ORGANIC FERTILIZER.....................:  2
+
+C   APPLNR  MONTH DAY  CARBORG NITORG
+C   ------  ----- ---- ------- ------
+       1    04    21   83000.   8300.
+       2    04    30  135500.  13550.
+ET
+
+
+C NITROGEN TRANSFORMATION PARAMETERS
+C TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+ INPUT FROM EXTERNAL FILE NITSINK.NS? (Y/N) ........................: N
+
+C MINERALIZATION
+C  RO = C/N RATIO OF THE BIOMASS
+C  FE = SYNTHESIS EFFICIENCY CONSTANT
+C  FH = HUMIFICATION COEFFICIENT
+    RO .............................................................: 10.0
+    FE .............................................................:  0.3
+    FH ....................................... .....................:  0.4
+
+C PLANT UPTAKE PARAMETERS
+C - IF THERE ARE NO PLANTS SKIP THIS PART 
+C   AND GO TO SECTION 'POTENTIAL UPTAKE RATES'
+C - SPECIFY
+C    RORAD = AVERAGE ROOT RADIUS                                     (MM)
+C    RDO   = AVERAGE DISTANCE BETWEEN SOIL SOLUTION AND ROOT SURFACE (MM)
+C     RORAD ........................................................: 0.2224
+C     RDO ..........................................................: 0.1
+C - IF CROP GROWTH IS MODELED SKIP THIS PART
+C    G        = FRACTION OF GROWING SEASON OF POTENTIAL UPTAKE (-)
+C    RNMAXP   = MAXIMUM NITROGEN UPTAKE                   (MG M-2)
+C    W0_RDENS = ROOT  DENSITY AT SOIL SURFACE             (CM L-1)
+C    ALFA     = REDUCTION FACTOR OF ROOT DENSITY VS DEPTH   (MM-1)
+C     G ............................................................: 
+C     RNMAXP .......................................................: 
+C     W0_RDENS .....................................................: 
+C     ALFA_RDENS....................................................:
+
+
+C POTENTIAL TRANSFORMATION RATE CONSTANTS
+C TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+INPUT FROM EXTERNAL FILE NITDEC.ND? .................................: N
+
+C  RKNITRI = NITRIFICATION CONSTANT   (DAY-1)
+C  RKDENIT = DENITRIFICATION CONSTANT (DAY-1)
+C  RKHYD   = UREUM HYDROLYSE CONSTANT (DAY-1)
+C  RKVOL   = VOLATILIZATION CONSTANT  (DAY-1)
+C  RKLIT   = DECAY FROM LITTER POOL   (DAY-1)
+C  RKMAN   = DECAY FROM MANURE POOL   (DAY-1)
+C  RKHUM   = DECAY FROM HUMUS POOL    (DAY-1)
+C COMP  RKNITRI  RKDENIT  RKHYD RKVOL  RKLIT  RKMAN  RKHUM
+C ----  -------  -------  ----- -----  -----  -----  -----
+    4   5.82     0.01     0.    0.0    0.035  0.035  0.00007
+    5   0.0      0.01     0.    0.0    0.035  0.035  0.00007
+   22   0.       0.0      0.    0.0    0.0    0.0    0.0000
+ET
+
+
+C ORGANIC POOL INITIAL VALUES
+C TTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+ INPUT FROM EXTERNAL FILE NITINIT.NI? (Y/N) ........................:  N
+
+C CCMANO = INITIAL CARBON IN MANURE POOL     (MG M-2)
+C CNMANO = INITIAL NITROGEN IN MANURE POOL   (MG M-2)
+C CCLITO = INITIAL CARBON IN LITTER POOL     (MG M-2)
+C CNLITO = INITIAL NITROGEN IN LITTER POOL   (MG M-2)
+C CCHUMO = INITIAL CARBON IN HUMUS POOL      (MG M-2)
+C CNHUMO = INITIAL NITROGEN IN HUMUS POOL    (MG M-2)
+
+C COMP   CCMANO    CNMANO    CCLITO    CNLITO    CCHUMO CNHUMO
+C ----   ------    ------    ------    ------    ------ ------
+     3   20200.     2020.    20200.     2020.   924200. 92410.
+     4    1500.      150.     1500.      150.   296400. 29620.
+     5    1000.      100.     1000.      100.   197600. 19780.
+    11    1000.      100.     1000.      100.   197600. 19780.
+    12      50.       10.       50.       10.     9600.   960.
+ET
+
+
+C NITROGEN PRINTER CONTROL
+C TTTTTTTTTTTTTTTTTTTTTTTT
+
+C OVERVIEW TABLES?
+ - OVERVIEW OF MAIN ORGANIC STATE VARIABLES  (NIT_SUM.OUT) : Y
+ - CUMULATIVE TERMS OF THE ORGANIC POOL      (NIT_CUM.OUT) : Y
+
+C MASS IN THE DIFFERENT ORGANIC MATTER POOLS? 
+ - ORGANIC LITER N  CONCENTRATION            (ORGNLIT.OUT) : N
+ - ORGANIC MANURE N  CONCENTRATION           (ORGNMAN.OUT) : N
+ - ORGANIC HUMUS N  CONCENTRATION            (ORGNHUM.OUT) : N
+ - ORGANIC LITTER C  CONCENTRATION           (ORGCLIT.OUT) : N
+ - ORGANIC MANURE C  CONCENTRATION           (ORGCMAN.OUT) : N
+ - ORGANIC HUMUS C  CONCENTRATION            (ORGCHUM.OUT) : N
+
+C CUMULATIVE NITROGEN BALANCE TERMS?
+ - NH4 UPTAKE                                (NH4UPT.OUT)  : N
+ - NO3 UPTAKE                                (NO3UPT.OUT)  : N
+ - DENITRIFICATION                           (DENITRIF.OUT): N
+ - NITRIFICATION                             (NITRIFIC.OUT): N
+ - HYDROLYSIS                                (HYDROLYS.OUT): N
+ - VOLATILISATION                            (VOLATIL.OUT) : N
+ - NH4 MINERALISATION                        (NH4MIN.OUT)  : N
+ - NO3 MINERALISATION                        (NO3MIN.OUT)  : N
+ :N
+ :N

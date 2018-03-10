@@ -1,0 +1,271 @@
+C ********
+C CROPDATA
+C ********
+
+
+C CROP NUMBER
+C TTTTTTTTTTT
+
+C  WINTER WHEAT = 1
+C  SPRING WHEAT = 2
+C  MAIZE        = 3
+C  POTATOE      = 4
+C  SUGAR BEET   = 5
+
+C SPECIFY THE CROP NUMBER ..............................: 3
+
+
+C MAIN CROP PARAMETERS
+C TTTTTTTTTTTTTTTTTTTT
+
+c- Number of seedlings                   (seedlings/m2) : 10
+c- LAI development rate during the
+c  the crop juvenile stage (Kl)            (m2/m2/°C/d) : 0.0194
+c- Base temperature for crop growth (Tb)           (°C) :  6.
+c- Specific leaf area (SLA)    (ha leaf/kg leaf weight) : 
+c  (only for crop 1,2,4,5)
+c- Leaf CO2 assimilation rate at    
+c  light saturation (AMAX)                    (kg/ha/h) :   70.0
+c- Initial light use                          
+c  efficiency (Epselon)              (kg/ha/h)/(J/m2/s) : 0.45
+c- Actual light extinction coefficient of the crop
+c  canopy for diffuse light (kdf)                 (1/m) : 0.65
+c- Scattering coefficient (Sigma)                   (%) : 0.2
+c- Maintanance factor for storage organs                
+c  (M_STORAGE_ORGANS)                 (kg CH2O/kg DM/d) : 0.01
+c- Assimilation requirement for conversion of
+c  dry matter in storage material       (kg CH2O/kg DM) : 1.491
+c- Ear area growth rate (EAR)
+C  (only for crop 1,2)               (ha EAR/kg DM/day) :
+c- Latitude of location                            (°)  :  50.864
+C- Critical leaf area for leaf death due to self shading
+c                                   (m2 leaves/m2 soil) :  4.0
+c- Initial value of the ear area index (EAI)
+c  (only for crop 1,2)                 (m2 ear/m2 soil) :  
+c- Initial value of the crop maturity class 
+c  (only for crop 4)                                    : 
+c- Initial leaf area of the seedling (m2 leaf/ m2 soil) :  0.00074
+
+
+C TABLE 1 
+C TTTTTTT
+
+C FOR CROP 1 2 3 5 
+C  SPECIFY THE DEVELOPMENT STAGE DEPENDENT REDUCTION FACTOR OF THE
+C  MAXIMAL LIGHT ASSIMILATION RATE
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 6
+C    DVS   RED_DVS_AMAX
+C    ---   ---------------
+     0.0        1.0
+     1.25       1.0
+     1.5        0.9
+     1.75       0.70
+     2.0        0.3
+     2.5        0.3
+ET
+
+
+C TABLE 2 
+C TTTTTTT
+
+C FOR CROP 1 2 3 4 5 
+C SPECIFY THE REDUCTION FACTOR OF THE MAXIMAL LIGHT
+C ASSIMILATION RATE AS A FUNCTION OF THE EFFECTIVE
+C AIR TEMPERATURE (T-TBASE)
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 7
+C    TE        RED_TEMP_AMAX
+C    --        ----------------
+      -10.0      0.01
+      9.0        0.05
+      16.0       0.8
+      18.0       0.94
+      20.0       1.0
+      30.0       1.0
+      40.0       0.75
+ET
+
+
+C TABLE 3
+C TTTTTTT
+
+C FOR CROP 1 2 3 
+C  SPECIFY THE DEVELOPMENT RATE AS A FUNCTION OF
+C  THE MEAN AIR TEMPERATURE (T) FOR DEVELOPMENT STAGE < 1
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 4
+C    T         DVR 
+C    --        ------
+     0.0       0.0
+     06.0      0.0
+     30.0      0.0346
+     35.0      0.0346
+ET
+
+C TABLE 4
+C TTTTTTT
+
+C FOR CROP 1 2 3 
+C  SPECIFY THE DEVELOPMENT RATE AS A FUNCTION OF
+C  THE MEAN AIR TEMPERATURE (T) FOR DEVELOPMENT STAGE > 1
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 4
+C    T        DVR 
+C    --       ------
+     0.0       0.0
+    06.0       0.0
+    30.0      0.0305
+    35.0      0.0305
+ET
+
+
+C TABLE 5
+C TTTTTTT
+
+C FOR CROP 1 2 3 5
+C  SPECIFY THE FRACTION OF THE TOTAL DRY MATTER ALLOCATED TO THE SHOOT
+C  AS A FUNCTION OF DEVELOPMENT STAGE
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 12
+C    DVS      FSH
+C    ---      ---
+     0.0      0.6
+     0.1      0.63
+     0.2      0.66
+     0.30     0.69
+     0.40     0.73
+     0.50     0.77
+     0.60     0.81
+     0.70     0.85
+     0.80     0.90
+     0.90     0.94
+     1.0      1.
+     2.5      1.0
+ET
+
+
+C TABLE 6
+C TTTTTTT
+
+C FOR CROP 1 2 3 5
+C  SPECIFY THE FRACTION OF THE SHOOT DRY MATTER ALLOCATED TO THE LEAVES
+C  AS A FUNCTION OF DEVELOPMENT STAGE
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 5
+C    DVS     FLV
+C    ---     ---
+     0.0     0.7
+     0.33    0.7
+     0.88    0.15
+     0.95    0.0
+     2.5     0.0
+ET
+
+
+C TABLE 7
+C TTTTTTT 
+
+C FOR CROP 1 2 3 5
+C  SPECIFY THE FRACTION OF THE SHOOT DRY MATTER ALLOCATED TO THE STEM
+C  AS A FUNCTION OF DEVELOPMENT STAGE
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 6
+C    DVS        FST
+C    ---        ---
+     0.0       0.3
+     0.33      0.3
+     0.88      0.85
+     0.95      1.
+     1.05      0.0
+     2.5       0.0
+ET
+
+
+C TABLE 8
+C TTTTTTT
+
+C FOR CROP 3 
+C  SPECIFY THE FRACTION OF THE SHOOT DRY MATTER ALLOCATED TO THE COB
+C FOR CROP 5 
+C  SPECIFY THE FRACTION OF THE TOTAL DRY MATTER ALLOCATED TO THE 
+C  FIBROUS ROOTS
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 6
+C    DVS  FCOB/FRAC_FIBROUS_ROOTS
+C    ---  -----------------------
+     0.0  0.0
+     0.8  0.0
+     0.95 0.
+     1.05 1.0
+     1.2  0.0
+     2.5  0.0
+ET
+
+
+C TABLE 9
+C TTTTTTT
+C FOR CROP 1 
+C  SPECIFY THE DVS DEPENDENT WEIGHING FUNCTION FOR THE LEAF AREA DEATH
+C  RATE COEFFICIENT (0<xx<1)
+C FOR CROP 3
+C  SPECIFY THE  SPECIFIC LEAVE AREA AS A FUNCTION OF DEVELOPMENT STAGE
+C  (HA LEAF/ KG DM LEAVES)
+C  -  SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 3
+C     DVS  WEIGH_KD_LAI_SENES/SLA
+C     ---  ----------------------
+      0.0  0.0035
+      0.7  0.0016
+      2.5  0.0016
+ET
+
+
+C TABLE 10
+C TTTTTTTT
+
+C FOR CROP 1 AND 2
+C  SPECIFY THE LEAF AREA DEATH RATE COEFFICIENT DUE TO SENESCENCE 
+C  AS A FUNCTION OF EFFECTIVE TEMPERATURE (M2 M-2 DAY-1)
+C FOR CROP 5
+C  SPECIFY THE DEATH RATE PER DEGREE DAY AS A FUNCTION OF DEVELOPMENT
+C  STAGE (M2 M-2 °C-1 DAY-1)
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE             : 
+C    TEMPA/DVS   KD_LAI_SENES/KD_LAI_SENES_MOD
+C    ---------   -----------------------------
+
+
+C TABLE 11
+C TTTTTTTT
+
+C FOR CROP 1 2 3 4 5
+C  SPECIFY THE NITROGEN CONTENT IN THE LEAVES AS A FRACTION OF THE
+C  DEVELOPMENT STAGE (ONLY IF NITROGEN IS SIMULATED)(kg N/kg D.M.)
+C  - SPECIFY THE NUMBER OF DATA PAIRS IN TABLE 11          : 2
+C    DVS    N_LEAVES
+C    ---    --------
+     0.0    0.04
+     2.1    0.01
+ET
+
+
+
+C ROOT GROWTH PARAMETERS
+C TTTTTTTTTTTTTTTTTTTTTT
+
+C - SPECIFIC ROOT LENGTH (CM/GR)                          :101.
+C - MAXIMAL ROOT LENGTH   (MM)                            :1000.0
+C - DIMESNIONLESS WEIGHTING FACTOR TO DETERMINE NEW ROOT GROWTH PER
+C   COMPARTMENT (-)
+C   COMP  FACTOR
+C   ----  ------
+    1     0.2
+    2     0.15
+    3     0.15
+    4     0.1
+    5     0.1
+    6     0.1
+    7     0.05
+    8     0.05
+    9     0.05
+   10     0.05
+   11     0.0
+ET
+
+
+C PRINT CONTROL
+C TTTTTTTTTTTTT
+
+- STATE VARIABLES FOR CROP YIELD (CROP_GRO.OUT) (Y/N)                    : Y
+- STATE VARIABLES THAT CHARACTERISE CROP DEVELOPMENT (CROP_DEV.OUT) (Y/N): Y
