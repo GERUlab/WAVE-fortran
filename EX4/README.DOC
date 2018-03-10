@@ -1,0 +1,28 @@
+***********************************************************************
+EXAMPLE 4 : SIMULATING THE SOIL WATER BALANCE AND CROP GROWTH IN A SOIL
+CROPPED WITH WINTER WHEAT.
+***********************************************************************
+
+In this example the soil water balance is modelled together with the crop
+growth using the SUCROS model.
+
+1) Edit the cropdata.in file and answer the following questions:
+   - What's the planting density of the winter wheat crop?
+   - What's the specific leaf area of the crop?
+   - At which leaf area value starts reduction of LAI growth rate caused
+     by self shading senescence?
+
+2) Run WAVE
+
+3) Edit the WAT_ET.OUT file and answer the following questions:
+   - What's the cumulative actual transpiration rate of the crop?
+   - When did the crop attain its maximal leaf area index?
+
+4) Edit the CROP_GRO.OUT file and answer the following questions:
+   - When did the crop flower? (DVS=1?)
+   - What's the dry matter production of the leaves, stems, roots, and 
+     storage organs at the end of the growing season?
+
+5) Edit the CROP_DEV.OUT file and answer the following questions:
+   - Did water stress occur during the grwoing season?
+
