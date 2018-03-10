@@ -1,4 +1,4 @@
-# wave-fortran
+# WAVE-fortran
 This repository contains the source code, exemples, an executable file and documentation of the WAVE model. 
 
 Reference: WAVE, a mathematical model for simulating water and agrochemicals in the soil and the vadose environment
