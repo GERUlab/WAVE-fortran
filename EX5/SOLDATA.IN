@@ -1,0 +1,142 @@
+C********
+C SOLDATA
+C********
+
+
+C GENERAL INFORMATION
+C TTTTTTTTTTTTTTTTTTT
+
+  NUMBER OF SOLUTES.....................................................: 1
+  USE THE MOBILE/IMMOBILE CONCEPT? (Y/N)................................: N
+
+
+C SOLUTE TRANSPORT PARAMETERS
+C TTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+C  INPUT FROM EXTERNAL FILE SOLPAR.SP? (Y/N)............................: N
+  
+C  SPECIFY THE SOIL SPECIFIC TRANSPORT PARAMETERS
+C  _____________________________________________
+C  FOR EACH SOIL LAYER
+C  -------------------
+C  IF NOT MOBILE/IMMOBILE CONCEPT, SKIP THE LAST 3 PARAMETERS
+C  NUMBER      PARAMETER
+C     1        HYDRODYNAMIC DISPERSIVITY (MM)
+C     2        MOBILE/TOTAL MOISTURE CONTENT (-)
+C     3        MASS TRANSFER COEFFICIENT (DAY -1)
+C     4        ADSORBED FRACTION IN THE MOBILE ZONE (-)
+C LR    1      2      3      4
+C --   ---    ---    ---    ---
+  1    100.0
+  2    100.0
+  3    100.0
+  4    100.0
+  5    100.0
+ET
+
+C  SPECIFY THE SPECIES SPECIFIC TRANSPORT PARAMETERS
+C  -------------------------------------------------
+C  FOR EACH SOLUTE SPECIES, FOR EACH SOIL LAYER
+C  NUMBER       PARAMETER
+C     1        DISTRIBUTION COEFFICIENT (L KG-1)
+C     2        CHEM DIFFUSION IN PURE WATER (MM2 DAY-1)
+C     3        A COEFFICIENT
+C     4        B COEFFICIENT
+
+
+C SOLUTE 1
+C LR     1      2     3     4
+C --  ----   ----  ----  ----
+
+  1   0.000   0.01  0.01  10. 
+  2   0.000   0.01  0.01  10.  
+  3   0.000   0.01  0.01  10.  
+  4   0.000   0.01  0.01  10.
+  5   0.000   0.01  0.01  10.
+ET
+
+
+
+
+C SOLUTE UPPER BOUNDARY CONDITIONS
+C TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+
+C  INPUT FROM EXTERNAL FILE SOLUBC.SU? (Y/N) ...........................: N
+
+C - DRY AND WET DEPOSITION
+C   IS THERE DRY AND WET DEPOSITION (Y/N) ..............................: N
+C  RAINCOSAL = AVERAGE LOAD OF SPECIES i IN PRECIPITATION (MG L-1)
+C  DDEPSAL   = AVERAGE DAILY DRY DEPOSITION OF SPECIES i (MG M-2)
+C   SPECIES   RAINCOSAL  DDEPSAL
+C   -------   ---------  -------
+
+
+C - INORGANIC FERTILIZATION
+C    NUMBER OF APPLICATIONS OF INORGANIC FERTILISER....................: 1
+C    DOSE(I) = APPLIED DOSE OF SPECIES I ON SPECIFIED DAY (MG/M**2)
+C    NOTICE THAT - THERE ARE THREE SOLUTE SPECIES FOR THE CASE OF NITROGEN
+C                - THE APPLICATIONS ARE NUMBERED 1, 2, .. , NUMBER
+C                  OF APPLICATIONS
+C    APPL M  D  DOSE(SOL1)  DOSE(SOL2)...DOSE(NR OF SPEC)
+C    ---- -- -- ----------  ---------  ---------
+     1    01 01 100.0        
+ET
+
+C - IRRIGATION
+C    DOSE(I) = APPLIED DOSE OF SPECIES I ON SPECIFIED DAY (MG/M**2)
+C    NUMBER OF IRRIGATIONS.............................................: 0
+C    APPL M  D  DOSE(SOL1)  DOSE(SOL2)...DOSE(NR OF SPEC)
+C    ---- -- -- ----------  ---------  ---------
+
+C - PLOWING
+C    SPECIFY NUMBER DATE OF PLOWING AND PLOWING DEPTH (MM)
+C    NUMBER OF TIMES PLOWED............................................: 0
+C    NR M  D  DEPTH
+C    -- -- -- -----
+
+C SOLUTE SINK TERM
+C TTTTTTTTTTTTTTTT
+
+C  INPUT FROM EXTERNAL FILE SOLSINK.SS? (Y/N) .........................: N
+
+C  SPECIFY THE POTENTIAL FIRST ORDER DECAY RATE FOR EACH SOLUTE SPECIES (DAY-1)
+C  THESE RATES ARE NORMALLY 0 FOR NITROGEN SPECIES
+C    COMP  RATES(1..NR_OF_SOL)
+C    ----  ---  ---  ---
+     1    0.0  
+ET
+
+C SOLUTE INITIAL VALUES
+C TTTTTTTTTTTTTTTTTTTTT
+
+C INPUT FROM EXTERNAL FILE SOLINIT.SI? (Y/N) ..........................: N
+
+C  SPECIFY THE INITIAL VALUES FOR THE SOLUTE MASS IN EACH COMPARTMENT
+C  FOR THE DIFFERENT SOLUTE SPECIES (MG M-2)
+C   COMP  CONC SOLUTES(1..NR_OF_SOL)
+C   ---   ------   ------   ------
+  1   0.0 
+ET
+
+C SOLUTE PRINTING CONTROL
+C TTTTTTTTTTTTTTTTTTTTTTT
+
+C OUTPUT FOR WHICH SOLUTES? (1.. NR OF SOL)
+C                                                          SPEC   (Y/N)
+  (SOLUTE 1 = UREUM  IN CASE OF NITROGEN)                  :  1    Y
+ET
+C  (SOLUTE 2 = AMMON. IN CASE OF NITROGEN)                    
+C  (SOLUTE 3 = NITRATE IN CASE OF NITROGEN)                 
+
+
+C WHAT KIND OF OUTPUT
+C
+  THE SUMMARY TABLE BE PRINTED(SOL_SUM.OUT)?               : Y
+  THE CUMULATIVE TERMS OF THE SOLUTE BALANCE (SOL_CUM.OUT)?: Y
+
+C TIME SERIES
+C
+  THE SOLUTE CONCENTR (CONC.OUT)?                          : Y
+  THE SINK TERM       (SINK.OUT)?                          : N
+
+

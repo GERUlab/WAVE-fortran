@@ -1,0 +1,26 @@
+*********************************************
+EXAMPLE 5: SOLUTE TRANSPORT IN A LAYERED SOIL
+*********************************************
+
+In this example, transport of a non reacting, non decaying solute will be simu-
+lated using the one-region convection dispersion equation, subjected to a sta-
+tionary upper and lower boundary condition.
+
+1) Edit the soldata.in file and answer the following questions:
+   - What's the chemical diffusion coefficient adopted in this example?
+   - What's the adopted hydrodynamic dispersivity?
+
+2) Run WAVE
+
+3) Edit SOL_SUM1.OUT and answer the following questions:
+   - What's the mass balance error made on the solute balance for the complete
+     soil profile and for the ISD compartment?
+   - Is the calculated leaching after 10 days substantial?
+   - Where is the mass of the peak situated in the soil profile?
+
+4) Edit SOL_CUM1.OUT and answer the following questions:
+   - What's the cumulative solute inflow?
+
+5) Combine CONC1.OUT and WC.OUT to calculate the time course of the solute 
+   concentrations in the soil solution.
+
