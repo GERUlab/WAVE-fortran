@@ -1,0 +1,83 @@
+c     version 3.0
+c     author: m vanclooster 22/2/2002
+
+c     general dimensions of the model
+c     -------------------------------
+c     kt_comps: number of compartments
+c     kt_layrs: number of layers 
+
+      integer kt_comps, kt_layrs 
+      parameter (kt_comps = 500 , kt_layrs = 50)
+      
+c     input 
+c     -----
+      parameter (kt_in_row = 10)
+
+c     water
+c     -----
+c     kt_parapf  : maximum number of parameters for the pf model
+c     kt_modelpf : maximum number of pf models
+c     kt_parakon : maximum number of parameters for the conductivity model
+c     kt_modelkon: maximum number of conductivity models
+c     maxiter    : maximum number of iterations for the newton rhapson
+c     mx_ph      : maximum value for pf (in mm)
+c     mn_ph      : minimum value for pf (in mm)
+
+      integer kt_parapf,kt_modelpf,kt_parakon,kt_modelkon,
+     > maxiter
+      double precision mx_ph,mn_ph
+      parameter (kt_parapf =8,kt_modelpf =4)
+      parameter (kt_parakon =3,kt_modelkon =6)
+      parameter (mx_ph = 100000000000000.d0)
+      parameter (mn_ph= 0.0000000001d0)
+      parameter (maxiter = 10)
+
+c     heat
+c     ----
+c     kt_paratemp: maximum number of parameters for the heat flow model
+
+      integer kt_paratemp
+      parameter (kt_paratemp = 1) 
+
+
+c     solute 
+c     ------ 
+c     kt_parasol: maximum number of parameters for the solute model
+c     kt_sol    : maximum number of solute species
+c     kt_ninof  : maximum number of fertiliser applications with inorganic n
+c     kt_nirr   : maximum number of fertigations
+c     kt_plo    : maximum number of plowing
+
+      integer kt_parasol, kt_sol, kt_ninof,kt_nirr,kt_plo
+      parameter (kt_parasol = 9,kt_sol = 4, kt_ninof = 10,
+     >            kt_nirr= 10 ,kt_plo = 10,kt_nof = 10)
+
+c     crop 
+c     ----
+c     kt_crop    : maximum number of crops
+c     kt_cropinfo: maximum number of data pairs in a table
+c     kt_table   : maximum number of tables
+
+      integer kt_crop, kt_cropinfo, kt_table
+      parameter (kt_crop = 5,kt_cropinfo = 14,kt_table = 15)
+
+c     general values 
+c     --------------
+c     mn_real    : minimum double precision
+c     mx_real    : maximum double precision
+c     mx_int     : maximum integer
+      
+      double precision mn_real, mx_real
+      integer mx_int
+      logical ok
+      parameter (mx_real =10000000000000000.d0 ,mn_real= 1/mx_real)
+      parameter (mx_int = 1000000000)
+      parameter (ok = .true.)
+
+c      output
+c      ------
+c      plus & neg are the symbols used in the output *.res to indicate whether a
+c                 certain output file will be produced yes or no
+
+       character plus, neg
+       parameter (plus = '+', neg = '-')
